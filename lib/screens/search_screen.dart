@@ -51,6 +51,31 @@ class _SearchScreenState extends State<SearchScreen> {
                         width: 20,
                         child: GestureDetector(
                             onTap: () {
+                              showDialog(
+                                  barrierDismissible: false,
+                                  context: context,
+                                  builder: (_) {
+                                    return AlertDialog(
+                                      content: SizedBox(
+                                        height: 50,
+                                        width: 100,
+                                        child: Center(
+                                          child: Column(
+                                            mainAxisAlignment:
+                                                MainAxisAlignment.center,
+                                            children: const [
+                                              CircularProgressIndicator()
+                                            ],
+                                          ),
+                                        ),
+                                      ),
+                                    );
+                                  });
+
+                              Future.delayed(const Duration(milliseconds: 1000),
+                                  () {
+                                Navigator.pop(context, 'cancel');
+                              });
                               $api.searchProduct2((msg) {
                                 print(msg);
                               }, search.text);
@@ -61,7 +86,8 @@ class _SearchScreenState extends State<SearchScreen> {
                       ),
                     ),
                     border: InputBorder.none,
-                    contentPadding: const EdgeInsets.only(bottom: 15, left: 5)),
+                    hintText: 'search here',
+                    contentPadding: const EdgeInsets.only(bottom: 11, left: 5)),
               ),
             ),
             actions: [
@@ -84,23 +110,23 @@ class _SearchScreenState extends State<SearchScreen> {
             child: Column(
               children: [
                 show
-                    ? const Text("")
+                    ? Container()
                     : Column(
                         children: [
-                          Row(
-                            children: const [
-                              Padding(
-                                padding: EdgeInsets.all(10.0),
-                                child: Text(
-                                  'Tìm Theo Loại',
-                                  style: TextStyle(
-                                      color: Colors.black,
-                                      fontWeight: FontWeight.bold,
-                                      fontSize: 16),
-                                ),
-                              ),
-                            ],
-                          ),
+                          // Row(
+                          //   children: const [
+                          //     Padding(
+                          //       padding: EdgeInsets.only(left: 10.0),
+                          //       child: Text(
+                          //         'Tìm Theo Loại',
+                          //         style: TextStyle(
+                          //             color: Colors.black,
+                          //             fontWeight: FontWeight.bold,
+                          //             fontSize: 15),
+                          //       ),
+                          //     ),
+                          //   ],
+                          // ),
                           SizedBox(
                             height: 30,
                             child: ListView(
@@ -109,6 +135,31 @@ class _SearchScreenState extends State<SearchScreen> {
                               children: [
                                 GestureDetector(
                                   onTap: () async {
+                                    showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (_) {
+                                          return AlertDialog(
+                                            content: SizedBox(
+                                              height: 50,
+                                              width: 100,
+                                              child: Center(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: const [
+                                                    CircularProgressIndicator()
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        });
+
+                                    Future.delayed(
+                                        const Duration(milliseconds: 1000), () {
+                                      Navigator.pop(context, 'cancel');
+                                    });
                                     await $api.searchProduct((msg) {
                                       print(msg);
                                     }, 4);
@@ -120,10 +171,10 @@ class _SearchScreenState extends State<SearchScreen> {
                                     width: 100,
                                     height: 35,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
-                                        color: Colors.transparent,
-                                        border:
-                                            Border.all(color: Colors.black)),
+                                      borderRadius: BorderRadius.circular(2),
+                                      color: Colors.transparent,
+                                      border: Border.all(color: Colors.black),
+                                    ),
                                     child: const Center(
                                         child: Text('Điện Thoại',
                                             style: TextStyle(
@@ -134,6 +185,31 @@ class _SearchScreenState extends State<SearchScreen> {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
+                                    showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (_) {
+                                          return AlertDialog(
+                                            content: SizedBox(
+                                              height: 50,
+                                              width: 100,
+                                              child: Center(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: const [
+                                                    CircularProgressIndicator()
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        });
+
+                                    Future.delayed(
+                                        const Duration(milliseconds: 1000), () {
+                                      Navigator.pop(context, 'cancel');
+                                    });
                                     await Provider.of<ProductApi>(context,
                                             listen: false)
                                         .searchProduct((msg) {
@@ -146,7 +222,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     width: 100,
                                     height: 35,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
+                                        borderRadius: BorderRadius.circular(2),
                                         color: Colors.transparent,
                                         border:
                                             Border.all(color: Colors.black)),
@@ -160,6 +236,31 @@ class _SearchScreenState extends State<SearchScreen> {
                                 ),
                                 GestureDetector(
                                   onTap: () async {
+                                    showDialog(
+                                        barrierDismissible: false,
+                                        context: context,
+                                        builder: (_) {
+                                          return AlertDialog(
+                                            content: SizedBox(
+                                              height: 50,
+                                              width: 100,
+                                              child: Center(
+                                                child: Column(
+                                                  mainAxisAlignment:
+                                                      MainAxisAlignment.center,
+                                                  children: const [
+                                                    CircularProgressIndicator()
+                                                  ],
+                                                ),
+                                              ),
+                                            ),
+                                          );
+                                        });
+
+                                    Future.delayed(
+                                        const Duration(milliseconds: 1000), () {
+                                      Navigator.pop(context, 'cancel');
+                                    });
                                     await Provider.of<ProductApi>(context,
                                             listen: false)
                                         .searchProduct((msg) {
@@ -173,7 +274,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                     width: 100,
                                     height: 30,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(5),
+                                        borderRadius: BorderRadius.circular(2),
                                         color: Colors.transparent,
                                         border:
                                             Border.all(color: Colors.black)),
@@ -223,12 +324,21 @@ class _SearchScreenState extends State<SearchScreen> {
                                     child: Image.network(
                                         'http://192.168.1.6:8000${$api.products2[index].image}')),
                                 Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Text($api.products2[index].name),
+                                  padding: const EdgeInsets.only(
+                                      top: 5.0,
+                                      bottom: 5.0,
+                                      left: 15,
+                                      right: 10),
+                                  child: Text(
+                                    $api.products2[index].name,
+                                  ),
                                 ),
                                 Padding(
                                   padding: const EdgeInsets.all(5.0),
-                                  child: Text('${$api.products2[index].price}'),
+                                  child: Text(
+                                      '${$api.products2[index].price}\$',
+                                      style:
+                                          const TextStyle(color: Colors.red)),
                                 )
                               ],
                             ),

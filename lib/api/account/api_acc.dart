@@ -1,15 +1,17 @@
 // ignore_for_file: avoid_print, unused_import
 
 import 'dart:convert';
-
+import 'dart:io';
 import 'package:ecommerce_shop/api/account/account_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
+import 'package:image_picker/image_picker.dart';
 
 class ApiAcc extends ChangeNotifier {
   String? ck;
   Account? account;
+  Account? info;
   Future<Account?> login(
     String email,
     String password,
@@ -32,7 +34,7 @@ class ApiAcc extends ChangeNotifier {
     }
     account = acc;
     notifyListeners();
-    print(account?.fullname);
+    // print(account?.fullname);
     return acc;
   }
 
@@ -61,5 +63,75 @@ class ApiAcc extends ChangeNotifier {
       print('tạo tài khoản không thành công!');
     }
     return kq;
+  }
+
+  Future<void> getInfoAcc(Function(String) onError, int accountid) async {
+    Account? acc;
+    String endpoint = 'http://192.168.1.6:8000/api/account/$accountid';
+    http.Response response = await http.get(Uri.parse(endpoint));
+    if (response.statusCode == 200) {
+      try {
+        // ignore: non_constant_identifier_names
+        dynamic JsonRaw = json.decode(response.body);
+        dynamic result = JsonRaw['account'];
+        acc = Account.fromJson(result);
+        notifyListeners();
+      } catch (e) {
+        print('status {$e}');
+      }
+    } else {
+      print('faild get info acc');
+    }
+    info = acc;
+    notifyListeners();
+  }
+
+  PickedFile? file;
+  String imagePath = '';
+  String tmpfile = "";
+  // XFile? tmpfile;
+  // String base64image = "";
+
+  final picker = ImagePicker();
+  chooseImage() async {
+    // ignore: deprecated_member_use
+    file = (await picker.getImage(source: ImageSource.gallery));
+
+    notifyListeners();
+    if (file != null) {
+      imagePath = file!.path;
+      tmpfile = imagePath;
+      notifyListeners();
+    } else {
+      imagePath = imagePath;
+    }
+    notifyListeners();
+  }
+
+  Future<void> uploadFile(File image, int id) async {
+    final bytes = image.readAsBytesSync();
+    // print(base64Encode(bytes));
+    String endpoint = "http://192.168.1.6:8000/api/upload";
+    http.Response response = await http.post(Uri.parse(endpoint),
+        body: ({'cc': base64Encode(bytes), 'id': id.toString()}));
+    if (response.statusCode == 200) {
+      try {
+        dynamic jsonRaw = json.decode(response.body);
+        dynamic data = jsonRaw['check'];
+      } catch (e) {
+        print('faild 1');
+      }
+    } else {
+      print('faild 2');
+    }
+    // getInfoAcc((msg) {
+    //   print(msg);
+    // }, id);
+    // notifyListeners();
+  }
+
+  setImage(value) {
+    imagePath = value;
+    notifyListeners();
   }
 }

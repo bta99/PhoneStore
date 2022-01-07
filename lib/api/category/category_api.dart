@@ -25,7 +25,7 @@ class CategoryApi extends ChangeNotifier {
       print('faild get slider');
     }
     // lstproduct = products;
-    print('success');
+    // print('success');
     categories = cate;
     notifyListeners();
     // print(categories.length);

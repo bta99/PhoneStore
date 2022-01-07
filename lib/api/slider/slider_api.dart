@@ -25,7 +25,6 @@ class SliderApi extends ChangeNotifier {
       print('faild get slider');
     }
     // lstproduct = products;
-    print('success');
     sliders = sli;
     notifyListeners();
     // print(sliders.length);

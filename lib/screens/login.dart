@@ -27,6 +27,7 @@ class _LoginScreenState extends State<LoginScreen> {
   @override
   Widget build(BuildContext context) {
     var acc = Provider.of<CartApi>(context, listen: false);
+    var account = Provider.of<ApiAcc>(context, listen: false);
     return LayoutBuilder(builder: (context, BoxConstraints boxConstraints) {
       return boxConstraints.maxWidth > 700
           ? Scaffold(
@@ -41,7 +42,7 @@ class _LoginScreenState extends State<LoginScreen> {
               ),
             )
           : Scaffold(
-              backgroundColor: Colors.pink[100],
+              backgroundColor: Colors.white,
               body: Padding(
                 padding: const EdgeInsets.all(15),
                 child: Center(
@@ -140,22 +141,45 @@ class _LoginScreenState extends State<LoginScreen> {
                                             ]);
                                       });
                                 } else {
-                                  // Navigator.pushNamedAndRemoveUntil(
-                                  //     context, 'home', (route) => false,
-                                  //     arguments: kq);
                                   acc.saveAcc(kq);
-                                  Navigator.pushReplacementNamed(
-                                    context,
-                                    'home',
-                                  );
+                                  account.getInfoAcc((msg) {
+                                    print(msg);
+                                  }, kq.id);
+                                  showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (_) {
+                                        return AlertDialog(
+                                          content: SizedBox(
+                                            height: 50,
+                                            width: 100,
+                                            child: Center(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: const [
+                                                  CircularProgressIndicator()
+                                                ],
+                                              ),
+                                            ),
+                                          ),
+                                        );
+                                      });
+                                  Future.delayed(
+                                      const Duration(milliseconds: 1000), () {
+                                    Navigator.pushReplacementNamed(
+                                      context,
+                                      'home',
+                                    );
+                                  });
                                 }
                               }
                             },
                             child: Row(
                               mainAxisAlignment: MainAxisAlignment.center,
                               children: const [
-                                // CircularProgressIndicator(color: Colors.white)
-                                Text('Đăng Nhập'), Icon(Icons.login)
+                                Text('Đăng Nhập'),
+                                Icon(Icons.login)
                               ],
                             )),
                       ),

@@ -1,8 +1,8 @@
-import 'dart:convert';
 import 'dart:io';
-import 'package:http/http.dart' as http;
+import 'package:ecommerce_shop/api/account/api_acc.dart';
+import 'package:ecommerce_shop/api/cart/cart_api.dart';
 import 'package:flutter/material.dart';
-import 'package:image_picker/image_picker.dart';
+import 'package:provider/provider.dart';
 
 class UploadImage extends StatefulWidget {
   const UploadImage({Key? key}) : super(key: key);
@@ -11,82 +11,113 @@ class UploadImage extends StatefulWidget {
 }
 
 class _UploadImageState extends State<UploadImage> {
-  PickedFile? file;
-  String imagePath = "";
-  XFile? tmpfile;
-  String base64image = "";
-
-  final picker = ImagePicker();
-  Future chooseImage() async {
-    // ignore: deprecated_member_use
-    file = (await picker.getImage(source: ImageSource.gallery));
-    setState(() {
-      imagePath = file!.path;
-    });
-  }
-
-  Future<void> uploadFile(File image) async {
-    final bytes = image.readAsBytesSync();
-    print(base64Encode(bytes));
-    String endpoint = "http://192.168.1.6:8000/api/upload";
-    http.Response response = await http.post(Uri.parse(endpoint),
-        body: ({'cc': base64Encode(bytes)}));
-    if (response.statusCode == 200) {
-      try {
-        dynamic jsonRaw = json.decode(response.body);
-        dynamic data = jsonRaw['check'];
-      } catch (e) {
-        print('faild 1');
-      }
-    } else {
-      print('faild 2');
-    }
-  }
-
   @override
   Widget build(BuildContext context) {
+    var id = Provider.of<CartApi>(context, listen: false);
+    var account = Provider.of<ApiAcc>(context, listen: false);
+
     return Scaffold(
       appBar: AppBar(
-        title: const Text('Upload file'),
+        backgroundColor: Colors.white,
+        title: const Text('Thay đổi ảnh đại diện',
+            style: TextStyle(color: Colors.black, fontSize: 15)),
         centerTitle: true,
+        leading: IconButton(
+            onPressed: () {
+              if (account.imagePath == "") {
+                account.setImage("");
+                account.getInfoAcc((msg) {
+                  print(msg);
+                }, account.info!.id);
+                Navigator.popAndPushNamed(context, 'info');
+              } else {
+                var content = const SnackBar(content: Text('bạn chưa lưu ảnh'));
+                ScaffoldMessenger.of(context).showSnackBar(content);
+              }
+            },
+            icon: const Icon(
+              Icons.arrow_back_ios,
+              color: Colors.black,
+              size: 16,
+            )),
       ),
-      body: SingleChildScrollView(
-        keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
-        child: Center(
-          child: Column(
-            children: [
-              SizedBox(
-                width: 200,
-                child: ElevatedButton(
-                    onPressed: () {
-                      chooseImage();
-                    },
-                    child: const Text('select Image')),
+      body: Consumer<ApiAcc>(
+        builder: (_, acc, child) {
+          return SingleChildScrollView(
+            keyboardDismissBehavior: ScrollViewKeyboardDismissBehavior.onDrag,
+            child: Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  SizedBox(
+                    width: 200,
+                    child: ElevatedButton(
+                        onPressed: () {
+                          account.chooseImage();
+                        },
+                        child: const Text('chọn ảnh')),
+                  ),
+                  account.imagePath != ""
+                      ? Container(
+                          color: Colors.transparent,
+                          width: 150,
+                          height: 105,
+                          child: Image.file(File(account.imagePath)),
+                        )
+                      : Container(
+                          decoration: BoxDecoration(
+                              border: Border.all(color: Colors.red)),
+                          width: 150,
+                          height: 105,
+                        ),
+                  SizedBox(
+                    width: 200,
+                    child: ElevatedButton(
+                        onPressed: () async {
+                          if (account.file != null) {
+                            await account.uploadFile(
+                                File(account.file!.path), id.acctemp!.id);
+                            account.imagePath = account.file!.path;
+                            showDialog(
+                                barrierDismissible: false,
+                                context: context,
+                                builder: (_) {
+                                  return AlertDialog(
+                                    content: SizedBox(
+                                      height: 50,
+                                      width: 100,
+                                      child: Center(
+                                        child: Column(
+                                          mainAxisAlignment:
+                                              MainAxisAlignment.center,
+                                          children: const [
+                                            CircularProgressIndicator()
+                                          ],
+                                        ),
+                                      ),
+                                    ),
+                                  );
+                                });
+                            await account.getInfoAcc((msg) {
+                              print(msg);
+                            }, account.info!.id);
+                            Future.delayed(const Duration(milliseconds: 1000),
+                                () {
+                              Navigator.popAndPushNamed(context, 'info');
+                            });
+                          } else {
+                            var content = const SnackBar(
+                                content: Text('vui lòng chọn ảnh'));
+                            ScaffoldMessenger.of(context).showSnackBar(content);
+                          }
+                        },
+                        child: const Text('Lưu ảnh')),
+                  ),
+                ],
               ),
-              imagePath != ""
-                  ? Container(
-                      width: 150,
-                      height: 105,
-                      child: Image.file(File(imagePath)),
-                    )
-                  : Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: const [CircularProgressIndicator()],
-                      ),
-                    ),
-              SizedBox(
-                width: 200,
-                child: ElevatedButton(
-                    onPressed: () async {
-                      print(File(file!.path));
-                      uploadFile(File(file!.path));
-                    },
-                    child: const Text('Upload file')),
-              ),
-            ],
-          ),
-        ),
+            ),
+          );
+        },
       ),
     );
   }

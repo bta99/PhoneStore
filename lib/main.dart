@@ -1,13 +1,19 @@
 import 'package:ecommerce_shop/api/account/api_acc.dart';
 import 'package:ecommerce_shop/api/cart/cart_api.dart';
 import 'package:ecommerce_shop/api/category/category_api.dart';
+import 'package:ecommerce_shop/api/order/order_api.dart';
 import 'package:ecommerce_shop/api/product/product_api.dart';
 import 'package:ecommerce_shop/api/slider/slider_api.dart';
 import 'package:ecommerce_shop/provider/account_provider/loginprovider.dart';
 import 'package:ecommerce_shop/provider/account_provider/register_provider.dart';
+import 'package:ecommerce_shop/screens/account_screen.dart';
 import 'package:ecommerce_shop/screens/cart_screen.dart';
+import 'package:ecommerce_shop/screens/checkbox_rating.dart';
+import 'package:ecommerce_shop/screens/checkout_screen.dart';
 import 'package:ecommerce_shop/screens/home_screen.dart';
 import 'package:ecommerce_shop/screens/login.dart';
+import 'package:ecommerce_shop/screens/ordermanagement_screen.dart';
+import 'package:ecommerce_shop/screens/pay_success_screen.dart';
 import 'package:ecommerce_shop/screens/register_screen.dart';
 import 'package:ecommerce_shop/screens/search_screen.dart';
 import 'package:ecommerce_shop/screens/test.dart';
@@ -23,7 +29,8 @@ void main() => runApp(MultiProvider(
         ChangeNotifierProvider(create: (_) => ProductApi()),
         ChangeNotifierProvider(create: (_) => CategoryApi()),
         ChangeNotifierProvider(create: (_) => ApiAcc()),
-        ChangeNotifierProvider(create: (_) => CartApi())
+        ChangeNotifierProvider(create: (_) => CartApi()),
+        ChangeNotifierProvider(create: (_) => OrderApi()),
       ],
       child: const MyApp(),
     ));
@@ -45,7 +52,12 @@ class MyApp extends StatelessWidget {
         'register': (context) => const RegisterScreen(),
         'search': (context) => const SearchScreen(),
         'test': (_) => const Test(),
-        'cart': (_) => const CartScreen()
+        'cart': (_) => const CartScreen(),
+        'info': (_) => const AccountScreen(),
+        'checkout': (_) => const CheckoutScreen(),
+        'ordermanagement': (_) => const OrderManagementScreen(),
+        'pay_success': (_) => const PaySuccessScreen(),
+        'rating': (_) => const CheckBoxScreen()
       },
     );
   }

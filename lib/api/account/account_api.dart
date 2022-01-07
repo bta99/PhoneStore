@@ -1,6 +1,7 @@
 class Account {
   int id;
   String fullname;
+  String? image;
   String email;
   String phone;
   String address;
@@ -15,6 +16,7 @@ class Account {
   Account.fromJson(Map<String, dynamic> json)
       : id = json['id'],
         fullname = json['fullname'],
+        image = json['image'],
         email = json['email'],
         phone = json['phone'],
         address = json['address'];

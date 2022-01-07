@@ -23,7 +23,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: Colors.pink[100],
+      backgroundColor: Colors.white,
       body: ListView(
         children: [
           SizedBox(
@@ -79,7 +79,7 @@ class _RegisterScreenState extends State<RegisterScreen> {
                           hintStyle: const TextStyle(color: Colors.black),
                           focusedBorder: const OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.blue)),
-                          hintText: 'username',
+                          hintText: 'Email',
                           border: const OutlineInputBorder(),
                           enabledBorder: const OutlineInputBorder(
                               borderSide: BorderSide(color: Colors.black))),

@@ -1,6 +1,8 @@
+import 'package:ecommerce_shop/api/account/api_acc.dart';
 import 'package:ecommerce_shop/api/cart/cart_api.dart';
 import 'package:ecommerce_shop/api/order/order_api.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class CheckoutScreen extends StatefulWidget {
@@ -11,9 +13,13 @@ class CheckoutScreen extends StatefulWidget {
 }
 
 class _CheckoutScreenState extends State<CheckoutScreen> {
+  TextEditingController nameCTL = TextEditingController();
+  TextEditingController phoneCTL = TextEditingController();
+  TextEditingController addressCTL = TextEditingController();
   @override
   Widget build(BuildContext context) {
-    var account = Provider.of<CartApi>(context, listen: false);
+    var cartapi = Provider.of<CartApi>(context, listen: false);
+    var accountapi = Provider.of<ApiAcc>(context, listen: false);
     var orderpay = Provider.of<OrderApi>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.white,
@@ -59,64 +65,149 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                 ),
               ),
             ),
-            Container(
-              margin: const EdgeInsets.only(
-                  top: 15, left: 10, right: 10, bottom: 10),
-              // height: 65,
-              decoration: BoxDecoration(
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: Colors.blue, width: 1)),
-              child: Row(
-                mainAxisAlignment: MainAxisAlignment.spaceAround,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.only(top: 10.0),
-                    child: Column(
-                      children: const [
-                        Icon(Icons.local_shipping_outlined,
-                            color: Colors.blue, size: 25)
-                      ],
+            GestureDetector(
+              onTap: () {
+                showDialog(
+                    context: context,
+                    builder: (_) {
+                      return AlertDialog(
+                          title: const Text('Chỉnh sửa Thông Tin Tài Khoản',
+                              style: TextStyle(fontSize: 15)),
+                          content: SizedBox(
+                              height: 400,
+                              width: 300,
+                              child: Column(
+                                children: [
+                                  Row(
+                                    children: const [
+                                      Text('Họ Tên'),
+                                    ],
+                                  ),
+                                  TextField(
+                                    controller: nameCTL
+                                      ..text = accountapi.info!.fullname,
+                                    decoration: const InputDecoration(),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    children: const [
+                                      Text('Số điện thoại'),
+                                    ],
+                                  ),
+                                  TextField(
+                                    controller: phoneCTL
+                                      ..text = accountapi.info!.phone,
+                                    decoration: const InputDecoration(),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    children: const [
+                                      Text('Địa Chỉ'),
+                                    ],
+                                  ),
+                                  TextField(
+                                    controller: addressCTL
+                                      ..text = accountapi.info!.address,
+                                    decoration: const InputDecoration(),
+                                  ),
+                                  const SizedBox(
+                                    height: 20,
+                                  ),
+                                  Row(
+                                    children: const [
+                                      Text('Email'),
+                                    ],
+                                  ),
+                                  TextFormField(
+                                    readOnly: true,
+                                    initialValue: accountapi.info!.email,
+                                    decoration: const InputDecoration(),
+                                  ),
+                                  SizedBox(
+                                    width: 300,
+                                    child: ElevatedButton(
+                                        onPressed: () async {
+                                          await accountapi.updateInfo(
+                                              accountapi.info!.id,
+                                              nameCTL.text,
+                                              phoneCTL.text,
+                                              addressCTL.text);
+                                          accountapi.getInfoAcc((msg) {
+                                            print(msg);
+                                          }, accountapi.info!.id);
+                                          Navigator.pop(context, 'cancel');
+                                        },
+                                        child: const Text('Lưu')),
+                                  )
+                                ],
+                              )));
+                    });
+              },
+              child: Container(
+                margin: const EdgeInsets.only(
+                    top: 15, left: 10, right: 10, bottom: 10),
+                // height: 65,
+                decoration: BoxDecoration(
+                    borderRadius: BorderRadius.circular(10),
+                    border: Border.all(color: Colors.blue, width: 1)),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.only(top: 10.0),
+                      child: Column(
+                        children: const [
+                          Icon(Icons.local_shipping_outlined,
+                              color: Colors.blue, size: 25)
+                        ],
+                      ),
                     ),
-                  ),
-                  Padding(
-                    padding: const EdgeInsets.only(top: 5, bottom: 5),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
+                    Consumer<ApiAcc>(builder: (_, acc, child) {
+                      return Padding(
+                        padding: const EdgeInsets.only(top: 5, bottom: 5),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Row(children: [
+                              Text(accountapi.info!.fullname,
+                                  style: const TextStyle(
+                                      fontWeight: FontWeight.bold)),
+                              const SizedBox(
+                                width: 15,
+                              ),
+                              Text(
+                                accountapi.info!.phone,
+                                style: const TextStyle(
+                                    fontSize: 13, color: Colors.grey),
+                              )
+                            ]),
+                            SizedBox(
+                                width: 200,
+                                child: Text(accountapi.info!.address,
+                                    style: const TextStyle(fontSize: 12)))
+                          ],
+                        ),
+                      );
+                    }),
+                    Column(
                       mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        Row(children: [
-                          Text(account.acctemp!.fullname,
-                              style:
-                                  const TextStyle(fontWeight: FontWeight.bold)),
-                          const SizedBox(
-                            width: 15,
-                          ),
-                          Text(
-                            account.acctemp!.phone,
-                            style: const TextStyle(
-                                fontSize: 13, color: Colors.grey),
-                          )
-                        ]),
-                        SizedBox(
-                            width: 200,
-                            child: Text(account.acctemp!.address,
-                                style: const TextStyle(fontSize: 12)))
-                      ],
-                    ),
-                  ),
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: const [Icon(Icons.arrow_forward_ios, size: 15)],
-                  )
-                ],
+                      children: const [Icon(Icons.arrow_forward_ios, size: 15)],
+                    )
+                  ],
+                ),
               ),
             ),
             FutureBuilder(
-              future: account.lstCartCheckout((msg) {
+              future: cartapi.lstCartCheckout((msg) {
                 print(msg);
-              }, account.acctemp!.id),
+              }, cartapi.acctemp!.id),
               builder: (_, AsyncSnapshot snapshot) {
-                var length = account.lstItemCheckout.length;
+                var length = cartapi.lstItemCheckout.length;
                 return Column(
                     //Danh sách sản phẩm thanh toán
                     children: List.generate(length, (index) {
@@ -128,7 +219,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Image.network(
-                              'http://192.168.1.6:8000${account.lstItemCheckout[index].image}',
+                              'http://192.168.1.6:8000${cartapi.lstItemCheckout[index].image}',
                               width: 70,
                               height: 70,
                             ),
@@ -143,34 +234,34 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                   Padding(
                                     padding: const EdgeInsets.only(right: 10.0),
                                     child: Text(
-                                      account.lstItemCheckout[index].name,
+                                      cartapi.lstItemCheckout[index].name,
                                       style: const TextStyle(fontSize: 13),
                                       maxLines: 1,
                                       overflow: TextOverflow.ellipsis,
                                     ),
                                   ),
                                   Text(
-                                      'Màu:${account.lstItemCheckout[index].color}'),
+                                      'Màu:${cartapi.lstItemCheckout[index].color}'),
                                   Row(
                                     mainAxisAlignment:
                                         MainAxisAlignment.spaceBetween,
                                     children: [
-                                      account.lstItemCheckout[index]
+                                      cartapi.lstItemCheckout[index]
                                                   .salesprice >
                                               0
                                           ? Text(
-                                              'Giá:${account.lstItemCheckout[index].salesprice}\$',
+                                              'Giá:${NumberFormat.currency(locale: 'vi').format(cartapi.lstItemCheckout[index].salesprice)}',
                                               style:
                                                   const TextStyle(fontSize: 14))
                                           : Text(
-                                              'Giá:${account.lstItemCheckout[index].price}\$',
+                                              'Giá:${NumberFormat.currency(locale: 'vi').format(cartapi.lstItemCheckout[index].price)}',
                                               style: const TextStyle(
                                                   fontSize: 14)),
                                       Padding(
                                         padding:
                                             const EdgeInsets.only(right: 30),
                                         child: Text(
-                                            'số lượng:${account.lstItemCheckout[index].quantity}',
+                                            'số lượng:${cartapi.lstItemCheckout[index].quantity}',
                                             style:
                                                 const TextStyle(fontSize: 14)),
                                       )
@@ -181,21 +272,33 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                     child: Row(
                                       children: [
                                         const Text(
-                                          'Subtotal:',
+                                          'Tổng tiền:',
                                           style: TextStyle(color: Colors.red),
                                         ),
-                                        account.lstItemCheckout[index]
+                                        cartapi.lstItemCheckout[index]
                                                     .salesprice >
                                                 0
-                                            ? Text(
-                                                '${account.lstItemCheckout[index].salesprice * account.lstItemCheckout[index].quantity}\$')
-                                            : Text(
-                                                '${account.lstItemCheckout[index].price * account.lstItemCheckout[index].quantity}\$'),
+                                            ? Text(NumberFormat.currency(
+                                                    locale: 'vi')
+                                                .format(cartapi
+                                                        .lstItemCheckout[index]
+                                                        .salesprice *
+                                                    cartapi
+                                                        .lstItemCheckout[index]
+                                                        .quantity))
+                                            : Text(NumberFormat.currency(
+                                                    locale: 'vie')
+                                                .format(cartapi
+                                                        .lstItemCheckout[index]
+                                                        .price *
+                                                    cartapi
+                                                        .lstItemCheckout[index]
+                                                        .quantity)),
                                         const Text(
-                                          ',item:',
+                                          ',số lượng:',
                                           style: TextStyle(color: Colors.red),
                                         ),
-                                        Text(account
+                                        Text(cartapi
                                             .lstItemCheckout[index].quantity
                                             .toString())
                                       ],
@@ -243,7 +346,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                             width: 15,
                           ),
                           Text(
-                            '0.5\$',
+                            '25.000 VND',
                             style: TextStyle(fontSize: 13, color: Colors.grey),
                           )
                         ]),
@@ -294,7 +397,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                         children: [
                           GestureDetector(
                             onTap: () {
-                              account.selectPay('Thanh toán khi nhận hàng');
+                              cartapi.selectPay('Thanh toán khi nhận hàng');
                             },
                             child: Padding(
                               padding:
@@ -333,7 +436,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           ),
                           GestureDetector(
                             onTap: () {
-                              account.selectPay('Thanh toán qua Momo');
+                              cartapi.selectPay('Thanh toán qua Momo');
                             },
                             child: Padding(
                               padding:
@@ -387,7 +490,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
         child: Consumer<CartApi>(
           builder: (_, cart, child) {
             return Padding(
-              padding: const EdgeInsets.only(left: 10.0, right: 10),
+              padding: const EdgeInsets.only(left: 5.0),
               child: Row(mainAxisAlignment: MainAxisAlignment.end, children: [
                 Column(
                   children: [
@@ -395,38 +498,39 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                       children: [
                         const Text('Tổng cộng:'),
                         Text(
-                          '${account.totalcheckout}\$',
+                          NumberFormat.currency(locale: 'vi')
+                              .format(cartapi.totalcheckout),
                           style:
-                              const TextStyle(color: Colors.red, fontSize: 18),
+                              const TextStyle(color: Colors.red, fontSize: 15),
                         ),
                       ],
                     ),
-                    account.pay != ""
-                        ? Text(account.pay,
+                    cartapi.pay != ""
+                        ? Text(cartapi.pay,
                             style: const TextStyle(fontSize: 12))
                         : Container()
                   ],
                 ),
                 const SizedBox(
-                  width: 30,
+                  width: 10,
                 ),
                 GestureDetector(
                   onTap: () {
                     var content = const SnackBar(
                         content: Text('vui lòng chọn phưong thức thanh toán'));
-                    if (account.pay == "") {
+                    if (cartapi.pay == "") {
                       ScaffoldMessenger.of(context).showSnackBar(content);
                     } else {
                       orderpay.pay(
-                          account.acctemp!.address,
-                          account.acctemp!.phone,
-                          account.totalcheckout,
-                          account.acctemp!.id);
-                      account.resetAllStatusCart((msg) {
+                          accountapi.info!.address,
+                          accountapi.info!.phone,
+                          cartapi.totalcheckout,
+                          accountapi.info!.id);
+                      cartapi.resetAllStatusCart((msg) {
                         print(msg);
-                      }, account.acctemp!.id);
-                      account.resetTotal();
-                      account.resetbtnAll();
+                      }, cartapi.acctemp!.id);
+                      cartapi.resetTotal();
+                      cartapi.resetbtnAll();
                       showDialog(
                           barrierDismissible: false,
                           context: context,

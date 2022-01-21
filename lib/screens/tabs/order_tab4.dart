@@ -1,6 +1,7 @@
 import 'package:ecommerce_shop/api/cart/cart_api.dart';
 import 'package:ecommerce_shop/api/order/order_api.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class OrderScreen4 extends StatefulWidget {
@@ -140,7 +141,8 @@ class _OrderScreen4State extends State<OrderScreen4> {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    '${orderapi.lstOrders[index].total}\$',
+                                    NumberFormat.currency(locale: 'vi').format(
+                                        orderapi.lstOrders[index].total),
                                   )
                                 ],
                               ),
@@ -180,8 +182,8 @@ class _OrderScreen4State extends State<OrderScreen4> {
                                   child: SizedBox(
                                     width: 50,
                                     height: 50,
-                                    child: Image.network(
-                                        'https://www.ignitebh.com/wp-content/uploads/2020/04/payment_success_icon.png'),
+                                    child: Image.asset(
+                                        'images/payment_success_icon.png'),
                                   ),
                                 )
                               ],

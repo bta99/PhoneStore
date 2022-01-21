@@ -36,8 +36,8 @@ class _RegisterScreenState extends State<RegisterScreen> {
                     const Text(
                       'Đăng Ký Tài Khoản',
                       style: TextStyle(
-                          color: Colors.black,
-                          fontSize: 30,
+                          color: Colors.redAccent,
+                          fontSize: 25,
                           fontWeight: FontWeight.bold),
                     ),
                     const SizedBox(
@@ -47,20 +47,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       controller: fullnameCTL,
                       style: const TextStyle(color: Colors.black),
                       decoration: InputDecoration(
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(35),
+                            borderSide: const BorderSide(color: Colors.red),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(35),
+                            borderSide: const BorderSide(color: Colors.red),
+                          ),
                           errorText: context
                                   .read<Register>()
                                   .validateFullname(fullnameCTL.text)
                               ? null
                               : context.watch<Register>().errorFullname,
                           suffixIcon: const Icon(Icons.account_circle_sharp,
-                              color: Colors.black, size: 25),
-                          hintStyle: const TextStyle(color: Colors.black),
-                          focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue)),
+                              color: Colors.redAccent, size: 25),
+                          hintStyle: const TextStyle(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(35),
+                              borderSide: const BorderSide(color: Colors.blue)),
                           hintText: 'Fullname',
                           border: const OutlineInputBorder(),
-                          enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black))),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(35),
+                              borderSide:
+                                  const BorderSide(color: Colors.black))),
                     ),
                     const SizedBox(
                       height: 15,
@@ -69,20 +80,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       controller: usernameCTL,
                       style: const TextStyle(color: Colors.black),
                       decoration: InputDecoration(
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(35),
+                            borderSide: const BorderSide(color: Colors.red),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(35),
+                            borderSide: const BorderSide(color: Colors.red),
+                          ),
                           errorText: context
                                   .read<Register>()
                                   .validateUsername(usernameCTL.text)
                               ? null
                               : context.watch<Register>().errorUsername,
                           suffixIcon: const Icon(Icons.email,
-                              color: Colors.black, size: 25),
-                          hintStyle: const TextStyle(color: Colors.black),
-                          focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue)),
+                              color: Colors.redAccent, size: 25),
+                          hintStyle: const TextStyle(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(35),
+                              borderSide: const BorderSide(color: Colors.blue)),
                           hintText: 'Email',
                           border: const OutlineInputBorder(),
-                          enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black))),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(35),
+                              borderSide:
+                                  const BorderSide(color: Colors.black))),
                     ),
                     const SizedBox(
                       height: 15,
@@ -91,20 +113,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       controller: phoneCTL,
                       style: const TextStyle(color: Colors.black),
                       decoration: InputDecoration(
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(35),
+                            borderSide: const BorderSide(color: Colors.red),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(35),
+                            borderSide: const BorderSide(color: Colors.red),
+                          ),
                           errorText: context
                                   .read<Register>()
                                   .validatePhone(phoneCTL.text)
                               ? null
                               : context.watch<Register>().errorPhone,
                           suffixIcon: const Icon(Icons.phone,
-                              color: Colors.black, size: 25),
-                          hintStyle: const TextStyle(color: Colors.black),
-                          focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue)),
+                              color: Colors.redAccent, size: 25),
+                          hintStyle: const TextStyle(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(35),
+                              borderSide: const BorderSide(color: Colors.blue)),
                           hintText: 'phone',
                           border: const OutlineInputBorder(),
-                          enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black))),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(35),
+                              borderSide:
+                                  const BorderSide(color: Colors.black))),
                     ),
                     const SizedBox(
                       height: 15,
@@ -113,20 +146,31 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       controller: addressCTL,
                       style: const TextStyle(color: Colors.black),
                       decoration: InputDecoration(
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(35),
+                            borderSide: const BorderSide(color: Colors.red),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(35),
+                            borderSide: const BorderSide(color: Colors.red),
+                          ),
                           errorText: context
                                   .read<Register>()
                                   .validateAddress(addressCTL.text)
                               ? null
                               : context.watch<Register>().errorAdress,
                           suffixIcon: const Icon(Icons.manage_accounts,
-                              color: Colors.black, size: 25),
-                          hintStyle: const TextStyle(color: Colors.black),
-                          focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue)),
+                              color: Colors.redAccent, size: 25),
+                          hintStyle: const TextStyle(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(35),
+                              borderSide: const BorderSide(color: Colors.blue)),
                           hintText: 'address',
                           border: const OutlineInputBorder(),
-                          enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black))),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(35),
+                              borderSide:
+                                  const BorderSide(color: Colors.black))),
                     ),
                     const SizedBox(
                       height: 15,
@@ -137,6 +181,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       obscureText:
                           Provider.of<Register>(context, listen: false).show,
                       decoration: InputDecoration(
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(35),
+                            borderSide: const BorderSide(color: Colors.red),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(35),
+                            borderSide: const BorderSide(color: Colors.red),
+                          ),
                           errorText: context
                                   .read<Register>()
                                   .validatePass(passCTL.text)
@@ -150,15 +202,18 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   context.watch<Register>().show
                                       ? Icons.visibility
                                       : Icons.visibility_off,
-                                  color: Colors.black,
+                                  color: Colors.redAccent,
                                   size: 25)),
-                          hintStyle: const TextStyle(color: Colors.black),
-                          focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue)),
+                          hintStyle: const TextStyle(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(35),
+                              borderSide: const BorderSide(color: Colors.blue)),
                           hintText: 'password',
                           border: const OutlineInputBorder(),
-                          enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black))),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(35),
+                              borderSide:
+                                  const BorderSide(color: Colors.black))),
                     ),
                     const SizedBox(
                       height: 15,
@@ -169,6 +224,14 @@ class _RegisterScreenState extends State<RegisterScreen> {
                       obscureText:
                           Provider.of<Register>(context, listen: false).show2,
                       decoration: InputDecoration(
+                          errorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(35),
+                            borderSide: const BorderSide(color: Colors.red),
+                          ),
+                          focusedErrorBorder: OutlineInputBorder(
+                            borderRadius: BorderRadius.circular(35),
+                            borderSide: const BorderSide(color: Colors.red),
+                          ),
                           errorText: context
                                   .read<Register>()
                                   .validateConfirmPass(
@@ -183,106 +246,116 @@ class _RegisterScreenState extends State<RegisterScreen> {
                                   context.watch<Register>().show2
                                       ? Icons.visibility
                                       : Icons.visibility_off,
-                                  color: Colors.black,
+                                  color: Colors.redAccent,
                                   size: 25)),
-                          hintStyle: const TextStyle(color: Colors.black),
-                          focusedBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.blue)),
+                          hintStyle: const TextStyle(color: Colors.grey),
+                          focusedBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(35),
+                              borderSide: const BorderSide(color: Colors.blue)),
                           hintText: 'confirm password',
                           border: const OutlineInputBorder(),
-                          enabledBorder: const OutlineInputBorder(
-                              borderSide: BorderSide(color: Colors.black))),
+                          enabledBorder: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(35),
+                              borderSide:
+                                  const BorderSide(color: Colors.black))),
                     ),
                     const SizedBox(
                       height: 15,
                     ),
-                    SizedBox(
-                      height: 40,
-                      width: 330,
-                      child: ElevatedButton(
-                          onPressed: () async {
-                            if (context.read<Register>().checkLogin(
-                                usernameCTL.text,
-                                passCTL.text,
-                                fullnameCTL.text,
-                                confirmpass.text,
-                                phoneCTL.text,
-                                addressCTL.text)) {
-                              var kq = await ApiAcc().Register(
-                                  fullnameCTL.text,
-                                  usernameCTL.text,
-                                  passCTL.text,
-                                  phoneCTL.text,
-                                  addressCTL.text);
-                              if (kq.toString() != 'true' || kq == null) {
-                                return showDialog(
-                                    context: context,
-                                    builder: (_) {
-                                      return AlertDialog(
-                                          title: const Center(
-                                              child: Text('Thông Báo')),
-                                          content: const Text(
-                                              'Email này đã tồn tại!'),
-                                          actions: [
-                                            ElevatedButton(
-                                                onPressed: () {
-                                                  Navigator.pop(
-                                                      context, 'Cancel');
-                                                },
-                                                child: const Text('Ok'))
-                                          ]);
-                                    });
-                              } else {
-                                return showDialog(
-                                    context: context,
-                                    builder: (_) {
-                                      return AlertDialog(
-                                        title: const Center(
-                                            child: Text('Thông Báo')),
-                                        content: const SizedBox(
-                                            height: 60,
-                                            child: Text('Đăng Ký Thành Công!')),
-                                        actions: [
-                                          Center(
-                                              child: ElevatedButton(
-                                                  onPressed: () {
-                                                    Navigator.pushNamed(
-                                                        context, '/');
-                                                  },
-                                                  child:
-                                                      const Text('Đăng Nhập')))
-                                        ],
-                                      );
-                                    });
-                              }
-                            }
-                            context.read<Register>().checkLogin(
-                                usernameCTL.text,
-                                passCTL.text,
-                                fullnameCTL.text,
-                                confirmpass.text,
-                                phoneCTL.text,
-                                addressCTL.text);
-                          },
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            children: const [
-                              // CircularProgressIndicator(color: Colors.black)
-                              Text('Đăng Ký'), Icon(Icons.login)
-                            ],
-                          )),
+                    GestureDetector(
+                      onTap: () async {
+                        if (context.read<Register>().checkLogin(
+                            usernameCTL.text,
+                            passCTL.text,
+                            fullnameCTL.text,
+                            confirmpass.text,
+                            phoneCTL.text,
+                            addressCTL.text)) {
+                          var kq = await ApiAcc().Register(
+                              fullnameCTL.text,
+                              usernameCTL.text,
+                              passCTL.text,
+                              phoneCTL.text,
+                              addressCTL.text);
+                          if (kq.toString() != 'true' || kq == null) {
+                            return showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return AlertDialog(
+                                      title: const Center(
+                                          child: Text('Thông Báo')),
+                                      content:
+                                          const Text('Email này đã tồn tại!'),
+                                      actions: [
+                                        ElevatedButton(
+                                            onPressed: () {
+                                              Navigator.pop(context, 'Cancel');
+                                            },
+                                            child: const Text('Ok'))
+                                      ]);
+                                });
+                          } else {
+                            return showDialog(
+                                context: context,
+                                builder: (_) {
+                                  return AlertDialog(
+                                    title:
+                                        const Center(child: Text('Thông Báo')),
+                                    content: const SizedBox(
+                                        height: 60,
+                                        child: Text('Đăng Ký Thành Công!')),
+                                    actions: [
+                                      Center(
+                                          child: ElevatedButton(
+                                              onPressed: () {
+                                                Navigator.pushNamed(
+                                                    context, '/');
+                                              },
+                                              child: const Text('Đăng Nhập')))
+                                    ],
+                                  );
+                                });
+                          }
+                        }
+                        context.read<Register>().checkLogin(
+                            usernameCTL.text,
+                            passCTL.text,
+                            fullnameCTL.text,
+                            confirmpass.text,
+                            phoneCTL.text,
+                            addressCTL.text);
+                      },
+                      child: Container(
+                        height: 55,
+                        decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(35),
+                            border: Border.all(
+                              color: Colors.redAccent,
+                              width: 2,
+                            )),
+                        child: const Center(
+                          child: Text(
+                            'Đăng ký',
+                            style: TextStyle(
+                              fontSize: 18,
+                              fontWeight: FontWeight.bold,
+                              color: Colors.redAccent,
+                            ),
+                          ),
+                        ),
+                      ),
                     ),
                     const SizedBox(
                       height: 10,
                     ),
-                    GestureDetector(
-                        onTap: () {
-                          Navigator.pushNamed(context, '/');
-                        },
-                        child: const Text('Đăng Nhập',
-                            style: TextStyle(
-                                color: Colors.blueAccent,
-                                fontWeight: FontWeight.bold)))
+                    // GestureDetector(
+                    //     onTap: () {
+                    //       Navigator.pushNamed(context, '/');
+                    //     },
+                    //     child: const Text('Đăng Nhập',
+                    //         style: TextStyle(
+                    //             color: Colors.blueAccent,
+                    //             fontWeight: FontWeight.bold)))
                   ],
                 ),
               ),
@@ -502,3 +575,12 @@ class _RegisterScreenState extends State<RegisterScreen> {
 //           ),
 //         ),
 //       )
+
+
+
+
+
+
+
+
+

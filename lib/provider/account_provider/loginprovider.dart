@@ -1,10 +1,11 @@
 import 'package:flutter/cupertino.dart';
-import 'package:provider/provider.dart';
+// import 'package:provider/provider.dart';
 
 class Login extends ChangeNotifier {
   bool show = true;
   String? errorUsername;
   String? errorPass;
+
   validateUsername(String username) {
     return username.length > 6 && username.contains('@');
   }

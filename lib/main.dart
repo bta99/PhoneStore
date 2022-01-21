@@ -4,6 +4,8 @@ import 'package:ecommerce_shop/api/category/category_api.dart';
 import 'package:ecommerce_shop/api/order/order_api.dart';
 import 'package:ecommerce_shop/api/product/product_api.dart';
 import 'package:ecommerce_shop/api/slider/slider_api.dart';
+import 'package:ecommerce_shop/api/wishlist/wish_list_api.dart';
+import 'package:ecommerce_shop/loading_screen.dart';
 import 'package:ecommerce_shop/provider/account_provider/loginprovider.dart';
 import 'package:ecommerce_shop/provider/account_provider/register_provider.dart';
 import 'package:ecommerce_shop/screens/account_screen.dart';
@@ -12,12 +14,15 @@ import 'package:ecommerce_shop/screens/checkbox_rating.dart';
 import 'package:ecommerce_shop/screens/checkout_screen.dart';
 import 'package:ecommerce_shop/screens/home_screen.dart';
 import 'package:ecommerce_shop/screens/login.dart';
+import 'package:ecommerce_shop/screens/order_cancel_screen.dart';
 import 'package:ecommerce_shop/screens/ordermanagement_screen.dart';
 import 'package:ecommerce_shop/screens/pay_success_screen.dart';
+import 'package:ecommerce_shop/screens/products_by_type.dart';
 import 'package:ecommerce_shop/screens/register_screen.dart';
 import 'package:ecommerce_shop/screens/search_screen.dart';
 import 'package:ecommerce_shop/screens/test.dart';
 import 'package:ecommerce_shop/screens/uploadfile.dart';
+import 'package:ecommerce_shop/screens/wish_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -31,6 +36,7 @@ void main() => runApp(MultiProvider(
         ChangeNotifierProvider(create: (_) => ApiAcc()),
         ChangeNotifierProvider(create: (_) => CartApi()),
         ChangeNotifierProvider(create: (_) => OrderApi()),
+        ChangeNotifierProvider(create: (_) => WishListApi()),
       ],
       child: const MyApp(),
     ));
@@ -44,7 +50,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(fontFamily: 'poppins'),
       debugShowCheckedModeBanner: false,
       // home: HomeScreen(),
-      initialRoute: '/',
+      initialRoute: 'loading',
       routes: {
         'upload': (context) => const UploadImage(),
         '/': (context) => const LoginScreen(),
@@ -57,7 +63,11 @@ class MyApp extends StatelessWidget {
         'checkout': (_) => const CheckoutScreen(),
         'ordermanagement': (_) => const OrderManagementScreen(),
         'pay_success': (_) => const PaySuccessScreen(),
-        'rating': (_) => const CheckBoxScreen()
+        'rating': (_) => const CheckBoxScreen(),
+        'loading': (_) => const LoadingScreen(),
+        'products_by_type': (_) => const ProductsByType(),
+        'wishlist': (_) => const WishListScreen(),
+        'order_cancel': (_) => const OrderCancelScreen()
       },
     );
   }

@@ -1,7 +1,8 @@
 import 'dart:convert';
-
+import 'package:ecommerce_shop/api/order/comment.dart';
 import 'package:ecommerce_shop/api/product/color_prod.dart';
 import 'package:ecommerce_shop/api/product/product.dart';
+import 'package:ecommerce_shop/api/wishlist/wishlist.dart';
 import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 
@@ -11,20 +12,23 @@ class ProductApi extends ChangeNotifier {
   List<Colorpro> lstcolor = [];
   List<Colorpro> lstsales = [];
   List<Colorpro> prod = [];
+  List<WishList> wishlist = [];
   int currentIndex = 0;
   int price = 0;
-  Colorpro? itemtemp;
+  late Colorpro itemtemp;
   int index = 0; // index bottom nav in home
   changeIndex(int value) {
     index = value;
     notifyListeners();
   }
 
-  Future<void> searchProduct(Function(String) onError, int? id) async {
+  Future<void> searchProduct(
+      Function(String) onError, int? id, String? cal) async {
     //get product detail
     List<Colorpro> products = [];
-    String endpoint = 'http://192.168.1.6:8000/api/search?categoryid=$id';
-    http.Response response = await http.get(Uri.parse(endpoint));
+    String endpoint = 'http://192.168.1.6:8000/api/search';
+    http.Response response = await http.post(Uri.parse(endpoint),
+        body: {'categoryid': id.toString(), 'cal': cal});
     if (response.statusCode == 200) {
       try {
         dynamic jsonRaw = json.decode(response.body);
@@ -64,41 +68,41 @@ class ProductApi extends ChangeNotifier {
     notifyListeners();
   }
 
-  Future<void> getProduct(Function(String) onError) async {
-    //get all product
-    // List<Product> products = [];
-    List<Colorpro> lstcolor2 = [];
-    String endpoint = 'http://192.168.1.6:8000/api/product';
-    http.Response response = await http.get(Uri.parse(endpoint));
-    if (response.statusCode == 200) {
-      try {
-        dynamic jsonRaw = json.decode(response.body);
-        // dynamic data = jsonRaw['lstPro'];
-        dynamic data2 = jsonRaw['lstColor'];
-        // data.forEach((p) {
-        //   products.add(Product.fromJson(p));
-        // });
-        data2.forEach((c) {
-          lstcolor2.add(Colorpro.fromJson(c));
-        });
-      } catch (e) {
-        print('faild login product cc');
-      }
-    } else {
-      print('login faild product');
-    }
-    // lstproduct = products;
-    lstcolor = lstcolor2;
-    notifyListeners();
-    // print(lstcolor.length);
-  }
+  // Future<void> getProduct(Function(String) onError) async {
+  //   List<Colorpro> lstcolor2 = [];
+  //   String endpoint = 'http://192.168.1.6:8000/api/product';
+  //   http.Response response = await http.get(Uri.parse(endpoint));
+  //   if (response.statusCode == 200) {
+  //     try {
+  //       dynamic jsonRaw = json.decode(response.body);
+  //       dynamic data2 = jsonRaw['lstColor'];
+  //       data2.forEach((c) {
+  //         lstcolor2.add(Colorpro.fromJson(c));
+  //       });
+  //     } catch (e) {
+  //       print('faild login product cc');
+  //     }
+  //   } else {
+  //     print('get product faild');
+  //   }
+  //   lstcolor = lstcolor2;
+  //   // notifyListeners();
+  // }
 
-  Future<void> getProductId(Function(String) onError, String id) async {
+  bool? check;
+  List<Comment> lstComments = [];
+  bool check2 = false;
+  Future<void> getProductId(
+      Function(String) onError, int id, int accountid, int productid) async {
     //get product like product type
     List<Colorpro> products = [];
+    List<Comment> lstTmp = [];
     String endpoint = 'http://192.168.1.6:8000/api/product2';
-    http.Response response =
-        await http.post(Uri.parse(endpoint), body: {'id': id});
+    http.Response response = await http.post(Uri.parse(endpoint), body: {
+      'id': id.toString(),
+      'account_id': accountid.toString(),
+      'product_id': productid.toString()
+    });
     if (response.statusCode == 200) {
       try {
         dynamic jsonRaw = json.decode(response.body);
@@ -106,16 +110,24 @@ class ProductApi extends ChangeNotifier {
         data.forEach((p) {
           products.add(Colorpro.fromJson(p));
         });
-        // print(products.length);
+        dynamic lstCm = jsonRaw['lstCM'];
+        dynamic kq = jsonRaw['check'];
+        dynamic kq2 = jsonRaw['check2'];
+        lstCm.forEach((item) {
+          lstTmp.add(Comment.fromJson(item));
+        });
+        lstComments = lstTmp;
+        check = kq;
+        prod = products;
+        check2 = kq2;
+        notifyListeners();
       } catch (e) {
         print('faild login product cc');
       }
     } else {
-      print('login faild product');
+      print('faild lay san pham theo id ');
     }
-    prod = products;
-    notifyListeners();
-    // print(prod.length);
+    // print(id);
   }
 
   void change(int value) {
@@ -128,26 +140,25 @@ class ProductApi extends ChangeNotifier {
     notifyListeners();
   }
 
-  void changeItem(Colorpro value) {
+  changeItem(Colorpro value) {
     itemtemp = value;
+    notifyListeners();
+  }
+
+  resetItemtemp() {
+    prod = [];
     notifyListeners();
   }
 
   /*get product sales*/
   Future<void> getProductSales(Function(String) onError) async {
-    //get all product
-    // List<Product> products = [];
     List<Colorpro> lstprodsales = [];
     String endpoint = 'http://192.168.1.6:8000/api/product-sales';
     http.Response response = await http.get(Uri.parse(endpoint));
     if (response.statusCode == 200) {
       try {
         dynamic jsonRaw = json.decode(response.body);
-        // dynamic data = jsonRaw['lstPro'];
         dynamic data2 = jsonRaw['lstColor'];
-        // data.forEach((p) {
-        //   products.add(Product.fromJson(p));
-        // });
         data2.forEach((c) {
           lstprodsales.add(Colorpro.fromJson(c));
         });
@@ -157,15 +168,14 @@ class ProductApi extends ChangeNotifier {
     } else {
       print('login faild product');
     }
-    // lstproduct = products;
     lstsales = lstprodsales;
-    notifyListeners();
-    // print(lstcolor.length);
+    // notifyListeners();
   }
 
-  Future<dynamic> getOneProduct(int id) async {
+  late Colorpro itemProduct;
+  Future<Colorpro> getOneProduct(int id) async {
     //get product like product type
-    Colorpro? itemProduct;
+
     String endpoint = 'http://192.168.1.6:8000/api/product/get-one/$id';
     http.Response response = await http.get(Uri.parse(endpoint));
     if (response.statusCode == 200) {
@@ -173,7 +183,6 @@ class ProductApi extends ChangeNotifier {
         dynamic jsonRaw = json.decode(response.body);
         dynamic data = jsonRaw['results'];
         itemProduct = Colorpro.fromJson(data[0]);
-        // print(itemProduct.name);
       } catch (e) {
         print('faild get item');
       }
@@ -181,5 +190,85 @@ class ProductApi extends ChangeNotifier {
       print('get item product faild');
     }
     return itemProduct;
+  }
+
+  Future<void> addComment(
+      int accountid, int productid, int rating, String content) async {
+    List<Comment> lsttmp = [];
+    String endpoint = 'http://192.168.1.6:8000/api/product/add-comment';
+    http.Response response = await http.post(Uri.parse(endpoint), body: {
+      'account_id': accountid.toString(),
+      'product_id': productid.toString(),
+      'rating': rating.toString(),
+      'content': content
+    });
+    if (response.statusCode == 200) {
+      try {
+        dynamic object = json.decode(response.body);
+        dynamic data = object['lstCM'];
+        data.forEach((item) {
+          lsttmp.add(Comment.fromJson(item));
+        });
+        lstComments = lsttmp;
+        notifyListeners();
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      print('faild add comment');
+    }
+    // getComment(productid, accountid);
+  }
+
+  Future<dynamic> addWishList(int accountid, int productid) async {
+    List<WishList> tmp = [];
+    String url = "http://192.168.1.6:8000/api/product/add-wishlist";
+    http.Response response = await http.post(Uri.parse(url), body: {
+      'account_id': accountid.toString(),
+      'product_id': productid.toString(),
+    });
+    if (response.statusCode == 200) {
+      try {
+        dynamic object = json.decode(response.body);
+        dynamic data = object['check'];
+        dynamic data2 = object['lstWL'];
+        check2 = data;
+        data2.forEach((item) {
+          tmp.add(WishList.fromJson(item));
+        });
+        wishlist = tmp;
+        notifyListeners();
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      print("faild add wish list");
+    }
+  }
+
+  Future<void> getWishList(int accountid) async {
+    List<WishList> list = [];
+    String url = "http://192.168.1.6:8000/api/product/wishlist/$accountid";
+    http.Response response = await http.get(Uri.parse(url));
+    if (response.statusCode == 200) {
+      try {
+        dynamic object = json.decode(response.body);
+        dynamic data = object['results'];
+        data.forEach((item) {
+          list.add(WishList.fromJson(item));
+        });
+        wishlist = list;
+        notifyListeners();
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      // print("faild get wish list");
+    }
+  }
+
+  changeSearchProduct(List<Colorpro> lst) {
+    products2 = lst;
+    notifyListeners();
   }
 }

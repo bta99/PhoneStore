@@ -1,6 +1,7 @@
 import 'package:ecommerce_shop/api/cart/cart_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class PaySuccessScreen extends StatefulWidget {
@@ -13,7 +14,7 @@ class PaySuccessScreen extends StatefulWidget {
 class _PaySuccessScreenState extends State<PaySuccessScreen> {
   @override
   Widget build(BuildContext context) {
-    var account = Provider.of<CartApi>(context, listen: false);
+    var cartapi = Provider.of<CartApi>(context, listen: false);
     return Scaffold(
       backgroundColor: Colors.white,
       appBar: AppBar(
@@ -29,8 +30,8 @@ class _PaySuccessScreenState extends State<PaySuccessScreen> {
         ),
         leading: IconButton(
             onPressed: () {
-              account.resetTotalcheckout();
-              Navigator.popAndPushNamed(context, 'cart');
+              cartapi.resetTotalcheckout();
+              Navigator.pushNamed(context, 'cart');
             },
             icon: const Icon(
               Icons.clear,
@@ -40,8 +41,8 @@ class _PaySuccessScreenState extends State<PaySuccessScreen> {
       body: Center(
         child: Column(
           children: [
-            Image.network(
-              'https://www.ignitebh.com/wp-content/uploads/2020/04/payment_success_icon.png',
+            Image.asset(
+              'images/payment_success_icon.png',
               height: 100,
               width: 100,
             ),
@@ -60,7 +61,9 @@ class _PaySuccessScreenState extends State<PaySuccessScreen> {
                       fontSize: 14,
                       fontWeight: FontWeight.bold,
                     )),
-                Text('${account.totalcheckout}\$',
+                Text(
+                    NumberFormat.currency(locale: 'vi')
+                        .format(cartapi.totalcheckout),
                     style: const TextStyle(
                       color: Colors.red,
                       fontSize: 15,
@@ -78,7 +81,7 @@ class _PaySuccessScreenState extends State<PaySuccessScreen> {
             ),
             GestureDetector(
               onTap: () {
-                account.resetTotalcheckout();
+                cartapi.resetTotalcheckout();
                 Navigator.popAndPushNamed(context, 'home');
               },
               child: Container(

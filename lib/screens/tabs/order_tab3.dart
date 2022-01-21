@@ -1,6 +1,7 @@
 import 'package:ecommerce_shop/api/cart/cart_api.dart';
 import 'package:ecommerce_shop/api/order/order_api.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 
 class OrderScreen3 extends StatefulWidget {
@@ -140,7 +141,8 @@ class _OrderScreen3State extends State<OrderScreen3> {
                                         fontWeight: FontWeight.bold),
                                   ),
                                   Text(
-                                    '${orderapi.lstOrders[index].total}\$',
+                                    NumberFormat.currency(locale: 'vi').format(
+                                        orderapi.lstOrders[index].total),
                                   )
                                 ],
                               ),

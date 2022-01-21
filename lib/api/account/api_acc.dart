@@ -1,5 +1,4 @@
 // ignore_for_file: avoid_print, unused_import
-
 import 'dart:convert';
 import 'dart:io';
 import 'package:ecommerce_shop/api/account/account_api.dart';
@@ -11,7 +10,6 @@ import 'package:image_picker/image_picker.dart';
 class ApiAcc extends ChangeNotifier {
   String? ck;
   Account? account;
-  Account? info;
   Future<Account?> login(
     String email,
     String password,
@@ -65,6 +63,7 @@ class ApiAcc extends ChangeNotifier {
     return kq;
   }
 
+  Account? info;
   Future<void> getInfoAcc(Function(String) onError, int accountid) async {
     Account? acc;
     String endpoint = 'http://192.168.1.6:8000/api/account/$accountid';
@@ -75,7 +74,6 @@ class ApiAcc extends ChangeNotifier {
         dynamic JsonRaw = json.decode(response.body);
         dynamic result = JsonRaw['account'];
         acc = Account.fromJson(result);
-        notifyListeners();
       } catch (e) {
         print('status {$e}');
       }
@@ -104,8 +102,8 @@ class ApiAcc extends ChangeNotifier {
       notifyListeners();
     } else {
       imagePath = imagePath;
+      notifyListeners();
     }
-    notifyListeners();
   }
 
   Future<void> uploadFile(File image, int id) async {
@@ -133,5 +131,49 @@ class ApiAcc extends ChangeNotifier {
   setImage(value) {
     imagePath = value;
     notifyListeners();
+  }
+
+  Future<dynamic> updateInfo(
+      int id, String name, String phone, String address) async {
+    String url = "http://192.168.1.6:8000/api/account/update-info";
+    http.Response response = await http.post(Uri.parse(url), body: {
+      'id': id.toString(),
+      'fullname': name,
+      'phone': phone,
+      'address': address
+    });
+    if (response.statusCode == 200) {
+      try {
+        dynamic object = json.decode(response.body);
+        dynamic data = object['success'];
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      print('update info faild');
+    }
+  }
+
+  Future<dynamic> changePass(
+      int accountid, String oldpass, String newpass) async {
+    bool results = false;
+    String url = "http://192.168.1.6:8000/api/account/change-password";
+    http.Response response = await http.post(Uri.parse(url), body: {
+      'account_id': accountid.toString(),
+      'oldpass': oldpass,
+      'newpass': newpass,
+    });
+    if (response.statusCode == 200) {
+      try {
+        dynamic object = json.decode(response.body);
+        dynamic data = object['success'];
+        results = data;
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      print('update info faild');
+    }
+    return results;
   }
 }

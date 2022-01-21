@@ -83,6 +83,8 @@ class _UploadImageState extends State<UploadImage> {
                                 context: context,
                                 builder: (_) {
                                   return AlertDialog(
+                                    backgroundColor: Colors.transparent,
+                                    elevation: 0.0,
                                     content: SizedBox(
                                       height: 50,
                                       width: 100,
@@ -101,7 +103,7 @@ class _UploadImageState extends State<UploadImage> {
                             await account.getInfoAcc((msg) {
                               print(msg);
                             }, account.info!.id);
-                            Future.delayed(const Duration(milliseconds: 1000),
+                            Future.delayed(const Duration(milliseconds: 1500),
                                 () {
                               Navigator.popAndPushNamed(context, 'info');
                             });

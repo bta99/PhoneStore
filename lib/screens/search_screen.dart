@@ -1,8 +1,11 @@
 import 'package:ecommerce_shop/api/account/account_api.dart';
 import 'package:ecommerce_shop/api/cart/cart_api.dart';
+import 'package:ecommerce_shop/api/product/color_prod.dart';
 import 'package:ecommerce_shop/api/product/product_api.dart';
+import 'package:ecommerce_shop/api/slider/slider_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:provider/provider.dart';
 import '../api/product/product_api.dart';
 
@@ -18,8 +21,8 @@ class _SearchScreenState extends State<SearchScreen> {
 
   @override
   Widget build(BuildContext context) {
-    var $api = Provider.of<ProductApi>(context, listen: false);
-    var acc = Provider.of<CartApi>(context, listen: false);
+    var productapi = Provider.of<ProductApi>(context, listen: false);
+    var slideapi = Provider.of<SliderApi>(context, listen: false);
     TextEditingController search = TextEditingController();
     return Scaffold(
         appBar: AppBar(
@@ -40,6 +43,15 @@ class _SearchScreenState extends State<SearchScreen> {
               child: TextField(
                 controller: search,
                 onTap: () {},
+                onChanged: (value) {
+                  List<Colorpro> lst = [];
+                  for (var item in slideapi.lstcolor) {
+                    if (item.name.contains(search.text)) {
+                      lst.add(item);
+                    }
+                  }
+                  productapi.changeSearchProduct(lst);
+                },
                 decoration: InputDecoration(
                     suffixIcon: Padding(
                       padding:
@@ -56,6 +68,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                   context: context,
                                   builder: (_) {
                                     return AlertDialog(
+                                      backgroundColor: Colors.transparent,
+                                      elevation: 0.0,
                                       content: SizedBox(
                                         height: 50,
                                         width: 100,
@@ -72,11 +86,11 @@ class _SearchScreenState extends State<SearchScreen> {
                                     );
                                   });
 
-                              Future.delayed(const Duration(milliseconds: 1000),
+                              Future.delayed(const Duration(milliseconds: 1500),
                                   () {
                                 Navigator.pop(context, 'cancel');
                               });
-                              $api.searchProduct2((msg) {
+                              productapi.searchProduct2((msg) {
                                 print(msg);
                               }, search.text);
                             },
@@ -140,6 +154,8 @@ class _SearchScreenState extends State<SearchScreen> {
                                         context: context,
                                         builder: (_) {
                                           return AlertDialog(
+                                            backgroundColor: Colors.transparent,
+                                            elevation: 0.0,
                                             content: SizedBox(
                                               height: 50,
                                               width: 100,
@@ -157,30 +173,36 @@ class _SearchScreenState extends State<SearchScreen> {
                                         });
 
                                     Future.delayed(
-                                        const Duration(milliseconds: 1000), () {
+                                        const Duration(milliseconds: 1500), () {
                                       Navigator.pop(context, 'cancel');
                                     });
-                                    await $api.searchProduct((msg) {
+                                    await productapi.searchProduct((msg) {
                                       print(msg);
-                                    }, 4);
+                                    }, 4, "");
                                     // setState(() {});
                                   },
                                   child: Container(
                                     margin: const EdgeInsets.only(
                                         right: 10, left: 10),
-                                    width: 100,
+                                    width: 120,
                                     height: 35,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(2),
+                                      borderRadius: BorderRadius.circular(25),
                                       color: Colors.transparent,
                                       border: Border.all(color: Colors.black),
                                     ),
-                                    child: const Center(
-                                        child: Text('Điện Thoại',
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Text('Điện Thoại',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.bold,
-                                            ))),
+                                            )),
+                                        Icon(Icons.phone_android),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 GestureDetector(
@@ -214,24 +236,30 @@ class _SearchScreenState extends State<SearchScreen> {
                                             listen: false)
                                         .searchProduct((msg) {
                                       print(msg);
-                                    }, 5);
+                                    }, 5, "");
                                     // setState(() {});
                                   },
                                   child: Container(
                                     margin: const EdgeInsets.only(right: 10),
-                                    width: 100,
+                                    width: 120,
                                     height: 35,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(2),
+                                        borderRadius: BorderRadius.circular(25),
                                         color: Colors.transparent,
                                         border:
                                             Border.all(color: Colors.black)),
-                                    child: const Center(
-                                        child: Text('LapTop',
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Text('LapTop',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.bold,
-                                            ))),
+                                            )),
+                                        Icon(Icons.laptop_chromebook),
+                                      ],
+                                    ),
                                   ),
                                 ),
                                 GestureDetector(
@@ -265,7 +293,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                             listen: false)
                                         .searchProduct((msg) {
                                       print(msg);
-                                    }, 0);
+                                    }, 0, "");
                                     print('hello');
                                     // setState(() {});
                                   },
@@ -274,16 +302,22 @@ class _SearchScreenState extends State<SearchScreen> {
                                     width: 100,
                                     height: 30,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(2),
+                                        borderRadius: BorderRadius.circular(25),
                                         color: Colors.transparent,
                                         border:
                                             Border.all(color: Colors.black)),
-                                    child: const Center(
-                                        child: Text('Tablet',
+                                    child: Row(
+                                      mainAxisAlignment:
+                                          MainAxisAlignment.center,
+                                      children: const [
+                                        Text('Tablet',
                                             style: TextStyle(
                                               color: Colors.black,
                                               fontWeight: FontWeight.bold,
-                                            ))),
+                                            )),
+                                        Icon(Icons.tablet_android),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],
@@ -305,24 +339,41 @@ class _SearchScreenState extends State<SearchScreen> {
                     return Wrap(
                       spacing: 10,
                       runSpacing: 10,
-                      children: List.generate($api.products2.length, (index) {
+                      children:
+                          List.generate(productapi.products2.length, (index) {
                         return GestureDetector(
                           onTap: () {
-                            $api.changeItem($api.products2[index]);
-                            Navigator.pushNamed(context, 'test',
-                                arguments: $api.itemtemp);
+                            productapi.changeItem(productapi.products2[index]);
+                            Navigator.pushNamed(
+                              context,
+                              'test',
+                            );
                           },
                           child: Container(
-                            padding: const EdgeInsets.all(3),
+                            padding: const EdgeInsets.all(5),
                             width: 160,
                             // height: 200,
-                            color: Colors.white,
+                            // color: Colors.white,
+                            decoration: BoxDecoration(
+                                boxShadow: [
+                                  BoxShadow(
+                                    color: Colors.grey.withOpacity(0.3),
+                                    blurRadius: 5,
+                                    spreadRadius: 5,
+                                  )
+                                ],
+                                color: Colors.white,
+                                borderRadius: BorderRadius.circular(10),
+                                border: Border.all(
+                                  color: Colors.transparent,
+                                  width: 1.5,
+                                )),
                             child: Column(
                               children: [
                                 ClipRRect(
                                     // borderRadius: BorderRadius.circular(5),
                                     child: Image.network(
-                                        'http://192.168.1.6:8000${$api.products2[index].image}')),
+                                        'http://192.168.1.6:8000${productapi.products2[index].image}')),
                                 Padding(
                                   padding: const EdgeInsets.only(
                                       top: 5.0,
@@ -330,16 +381,41 @@ class _SearchScreenState extends State<SearchScreen> {
                                       left: 15,
                                       right: 10),
                                   child: Text(
-                                    $api.products2[index].name,
+                                    productapi.products2[index].name,
                                   ),
                                 ),
-                                Padding(
-                                  padding: const EdgeInsets.all(5.0),
-                                  child: Text(
-                                      '${$api.products2[index].price}\$',
-                                      style:
-                                          const TextStyle(color: Colors.red)),
-                                )
+                                productapi.products2[index].salesprice <= 0
+                                    ? Padding(
+                                        padding: const EdgeInsets.all(5.0),
+                                        child: Text(
+                                            NumberFormat.currency(locale: 'vi')
+                                                .format(productapi
+                                                    .products2[index].price),
+                                            style: const TextStyle(
+                                                color: Colors.red)),
+                                      )
+                                    : Column(
+                                        children: [
+                                          Text(
+                                              NumberFormat.currency(
+                                                      locale: 'vi')
+                                                  .format(productapi
+                                                      .products2[index]
+                                                      .salesprice),
+                                              style: const TextStyle(
+                                                  color: Colors.red)),
+                                          Text(
+                                              NumberFormat.currency(
+                                                      locale: 'vi')
+                                                  .format(productapi
+                                                      .products2[index].price),
+                                              style: const TextStyle(
+                                                color: Colors.black,
+                                                decoration:
+                                                    TextDecoration.lineThrough,
+                                              )),
+                                        ],
+                                      )
                               ],
                             ),
                           ),

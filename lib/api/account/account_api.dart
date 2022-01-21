@@ -2,7 +2,7 @@ class Account {
   int id;
   String fullname;
   String? image;
-  String email;
+  String? email;
   String phone;
   String address;
   // String password;

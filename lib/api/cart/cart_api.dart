@@ -78,6 +78,7 @@ class CartApi extends ChangeNotifier {
 
   Future<void> updateStatusCart(
       Function(String) onError, int accountid, int productid) async {
+    List<Cartitem> cartTmp = [];
     String endpoint = 'http://192.168.1.6:8000/api/cart/update-status-cart';
     http.Response response = await http.post(Uri.parse(endpoint),
         body: ({
@@ -89,10 +90,15 @@ class CartApi extends ChangeNotifier {
         // ignore: non_constant_identifier_names
         dynamic JsonRaw = json.decode(response.body);
         dynamic result = JsonRaw['results'];
+        dynamic result2 = JsonRaw['lstCart'];
+        result2.forEach((item) {
+          cartTmp.add(Cartitem.fromJson(item));
+        });
+        lstcart = cartTmp;
         kq = result;
-        getCart((msg) {
-          print(msg);
-        }, accountid);
+        // getCart((msg) {
+        //   print(msg);
+        // }, accountid);
         notifyListeners();
       } catch (e) {
         print('status {$e}');
@@ -103,7 +109,7 @@ class CartApi extends ChangeNotifier {
   }
 
   updateTotal(Cartitem c) {
-    if (c.status == 0) {
+    if (c.status == 1) {
       if (c.salesprice > 0) {
         total += c.salesprice * c.quantity;
       } else {
@@ -137,6 +143,7 @@ class CartApi extends ChangeNotifier {
 
   Future<void> deleteCart(
       Function(String) onError, int accountid, int productid) async {
+    List<Cartitem> cartTmp = [];
     String endpoint = 'http://192.168.1.6:8000/api/cart/delete-cart';
     http.Response response = await http.post(Uri.parse(endpoint),
         body: ({
@@ -148,10 +155,15 @@ class CartApi extends ChangeNotifier {
         // ignore: non_constant_identifier_names
         dynamic JsonRaw = json.decode(response.body);
         dynamic result = JsonRaw['results'];
+        dynamic result2 = JsonRaw['lstCart'];
+        result2.forEach((item) {
+          cartTmp.add(Cartitem.fromJson(item));
+        });
+        lstcart = cartTmp;
         kq = result;
-        getCart((msg) {
-          print(msg);
-        }, accountid);
+        // getCart((msg) {
+        //   print(msg);
+        // }, accountid);
         notifyListeners();
       } catch (e) {
         print('status {$e}');
@@ -182,6 +194,7 @@ class CartApi extends ChangeNotifier {
 
   bool? check;
   Future<bool?> updateQuantity(int accountid, int productid, int cal) async {
+    List<Cartitem> cartTmp = [];
     String endpoint = 'http://192.168.1.6:8000/api/cart/up-quantity';
     http.Response response = await http.post(Uri.parse(endpoint),
         body: ({
@@ -194,10 +207,15 @@ class CartApi extends ChangeNotifier {
         // ignore: non_constant_identifier_names
         dynamic JsonRaw = json.decode(response.body);
         dynamic result = JsonRaw['success'];
+        dynamic result2 = JsonRaw['lstCart'];
+        result2.forEach((item) {
+          cartTmp.add(Cartitem.fromJson(item));
+        });
+        lstcart = cartTmp;
         check = result;
-        getCart((msg) {
-          print(msg);
-        }, accountid);
+        // getCart((msg) {
+        //   print(msg);
+        // }, accountid);
         notifyListeners();
       } catch (e) {
         print('status {$e}');
@@ -221,7 +239,8 @@ class CartApi extends ChangeNotifier {
   }
 
   remove(Cartitem c) {
-    if (c.quantity > 1 && c.status == 1) {
+    // print(c.quantity);
+    if (c.quantity > 0 && c.status == 1) {
       if (c.salesprice > 0) {
         total -= c.salesprice;
         notifyListeners();
@@ -229,10 +248,12 @@ class CartApi extends ChangeNotifier {
         total -= c.price;
         notifyListeners();
       }
+      // print('cc');
     }
   }
 
   Future<void> selectAll(Function(String) onError, int accountid) async {
+    List<Cartitem> cartTmp = [];
     String endpoint = 'http://192.168.1.6:8000/api/cart/select-allcart';
     http.Response response = await http.post(Uri.parse(endpoint),
         body: ({
@@ -245,7 +266,6 @@ class CartApi extends ChangeNotifier {
         dynamic JsonRaw = json.decode(response.body);
         dynamic result = JsonRaw['results'];
         notifyListeners();
-
         btnAll = !btnAll;
         if (btnAll == true) {
           total = 0;
@@ -269,9 +289,11 @@ class CartApi extends ChangeNotifier {
             }
           }
         }
-        getCart((msg) {
-          print(msg);
-        }, accountid);
+        dynamic result2 = JsonRaw['lstCart'];
+        result2.forEach((item) {
+          cartTmp.add(Cartitem.fromJson(item));
+        });
+        lstcart = cartTmp;
         notifyListeners();
       } catch (e) {
         print('status {$e}');

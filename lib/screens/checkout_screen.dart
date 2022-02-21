@@ -136,9 +136,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                                               nameCTL.text,
                                               phoneCTL.text,
                                               addressCTL.text);
-                                          accountapi.getInfoAcc((msg) {
-                                            print(msg);
-                                          }, accountapi.info!.id);
+                                          // accountapi.getInfoAcc((msg) {
+                                          //   print(msg);
+                                          // }, accountapi.info!.id);
                                           Navigator.pop(context, 'cancel');
                                         },
                                         child: const Text('Lưu')),
@@ -219,7 +219,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           crossAxisAlignment: CrossAxisAlignment.start,
                           children: [
                             Image.network(
-                              'http://192.168.1.6:8000${cartapi.lstItemCheckout[index].image}',
+                              'http://192.168.1.4:8000${cartapi.lstItemCheckout[index].image}',
                               width: 70,
                               height: 70,
                             ),
@@ -526,9 +526,9 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           accountapi.info!.phone,
                           cartapi.totalcheckout,
                           accountapi.info!.id);
-                      cartapi.resetAllStatusCart((msg) {
-                        print(msg);
-                      }, cartapi.acctemp!.id);
+                      // cartapi.resetAllStatusCart((msg) {
+                      //   print(msg);
+                      // }, cartapi.acctemp!.id);
                       cartapi.resetTotal();
                       cartapi.resetbtnAll();
                       showDialog(
@@ -536,6 +536,8 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                           context: context,
                           builder: (_) {
                             return AlertDialog(
+                              backgroundColor: Colors.transparent,
+                              elevation: 0.0,
                               content: SizedBox(
                                 height: 50,
                                 width: 100,
@@ -550,7 +552,7 @@ class _CheckoutScreenState extends State<CheckoutScreen> {
                               ),
                             );
                           });
-                      Future.delayed(const Duration(milliseconds: 1000), () {
+                      Future.delayed(const Duration(milliseconds: 2000), () {
                         Navigator.pushNamed(context, 'pay_success');
                       });
                     }

@@ -180,7 +180,12 @@ class _OrderScreen1State extends State<OrderScreen1> {
                                         width: 200,
                                         height: 35,
                                         child: ElevatedButton(
-                                            onPressed: () {},
+                                            onPressed: () {
+                                              Navigator.pushNamed(
+                                                  context, 'order_detail',
+                                                  arguments: orderapi
+                                                      .lstOrders[index]);
+                                            },
                                             child: const Text(
                                                 'Xem chi tiết đơn hàng')),
                                       ),
@@ -201,10 +206,10 @@ class _OrderScreen1State extends State<OrderScreen1> {
                                                   orderapi.lstOrders[index].id,
                                                   orderapi.lstOrders[index]
                                                       .accountid);
-                                              orderapi.getOrder(
-                                                  orderapi.lstOrders[index]
-                                                      .accountid,
-                                                  'chờ xử lý');
+                                              // orderapi.getOrder(
+                                              //     orderapi.lstOrders[index]
+                                              //         .accountid,
+                                              //     'chờ xử lý');
                                             },
                                             child: const Text('Huỷ')),
                                       ),

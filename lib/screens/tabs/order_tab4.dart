@@ -172,7 +172,12 @@ class _OrderScreen4State extends State<OrderScreen4> {
                                     width: 200,
                                     height: 35,
                                     child: ElevatedButton(
-                                        onPressed: () {},
+                                        onPressed: () {
+                                          Navigator.pushNamed(
+                                              context, 'order_detail',
+                                              arguments:
+                                                  orderapi.lstOrders[index]);
+                                        },
                                         child: const Text(
                                             'Xem chi tiết đơn hàng')),
                                   ),

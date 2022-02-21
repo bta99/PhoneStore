@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:ecommerce_shop/api/order/comment.dart';
+import 'package:ecommerce_shop/api/order/notification.dart';
 import 'package:ecommerce_shop/api/order/order_item_show.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:http/http.dart' as http;
@@ -14,7 +15,7 @@ class OrderApi extends ChangeNotifier {
 
   Future<void> pay(
       String address, String phone, int total, int accountid) async {
-    String endpoint = 'http://192.168.1.6:8000/api/cart/pay';
+    String endpoint = 'http://192.168.1.4:8000/api/cart/pay';
     http.Response response = await http.post(Uri.parse(endpoint), body: {
       'address': address,
       'phone': phone,
@@ -37,7 +38,7 @@ class OrderApi extends ChangeNotifier {
   List<OrderItem> lstOrders = [];
   Future<void> getOrder(int accountid, String status) async {
     List<OrderItem> lstTmp = [];
-    String endpoint = 'http://192.168.1.6:8000/api/cart/get-order';
+    String endpoint = 'http://192.168.1.4:8000/api/cart/get-order';
     http.Response response = await http.post(Uri.parse(endpoint),
         body: {'account_id': accountid.toString(), 'status': status});
     if (response.statusCode == 200) {
@@ -58,7 +59,7 @@ class OrderApi extends ChangeNotifier {
   }
 
   // Future<void> checkComment(int accountid, int productid) async {
-  //   String endpoint = 'http://192.168.1.6:8000/api/product/check-comment';
+  //   String endpoint = 'http://192.168.1.4:8000/api/product/check-comment';
   //   http.Response response = await http.post(Uri.parse(endpoint), body: {
   //     'account_id': accountid.toString(),
   //     'product_id': productid.toString()
@@ -80,7 +81,7 @@ class OrderApi extends ChangeNotifier {
   // List<Comment> lstComments = [];
   // Future<void> getComment(int productid, int accountid) async {
   //   List<Comment> lstTmp = [];
-  //   String endpoint = 'http://192.168.1.6:8000/api/product/comment';
+  //   String endpoint = 'http://192.168.1.4:8000/api/product/comment';
   //   http.Response response = await http.post(Uri.parse(endpoint), body: {
   //     'product_id': productid.toString(),
   //     'account_id': accountid.toString()
@@ -108,18 +109,72 @@ class OrderApi extends ChangeNotifier {
   // }
 
   Future<void> cancelOrder(int orderId, int accountId) async {
-    String url = "http://192.168.1.6:8000/api/cart/cancel-order";
+    List<OrderItem> tmp = [];
+    String url = "http://192.168.1.4:8000/api/cart/cancel-order";
     http.Response response = await http.post(Uri.parse(url),
         body: {'id': orderId.toString(), 'account_id': accountId.toString()});
     if (response.statusCode == 200) {
       try {
         dynamic object = json.decode(response.body);
         dynamic data = object['results'];
+        dynamic data2 = object['lstorder'];
+        data2.forEach((item) {
+          tmp.add(OrderItem.fromJson(item));
+        });
+        lstOrders = tmp;
+        notifyListeners();
       } catch (e) {
         print(e);
       }
     } else {
       print('cancel order faild');
+    }
+  }
+
+  List<NotificationModel> lstNotifi = [];
+  Future<void> getNotifi(int accountid) async {
+    List<NotificationModel> lstTmp = [];
+    String endpoint = 'http://192.168.1.4:8000/api/get-notification';
+    http.Response response = await http
+        .post(Uri.parse(endpoint), body: {'account_id': accountid.toString()});
+    if (response.statusCode == 200) {
+      try {
+        dynamic object = json.decode(response.body);
+        dynamic data = object['lstNotification'];
+        data.forEach((item) {
+          lstTmp.add(NotificationModel.fromJson(item));
+        });
+        lstNotifi = lstTmp;
+        notifyListeners();
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      print('get notify faild');
+    }
+  }
+
+  Future<void> deleteOrder(int orderId, int accountId) async {
+    List<OrderItem> tmp = [];
+    String url = "http://192.168.1.4:8000/api/cart/delete-order";
+    http.Response response = await http.post(Uri.parse(url), body: {
+      'order_id': orderId.toString(),
+      'account_id': accountId.toString()
+    });
+    if (response.statusCode == 200) {
+      try {
+        dynamic object = json.decode(response.body);
+        dynamic data2 = object['lstorder'];
+        data2.forEach((item) {
+          tmp.add(OrderItem.fromJson(item));
+        });
+        lstOrders = tmp;
+        notifyListeners();
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      print('delete order faild');
     }
   }
 }

@@ -7,7 +7,7 @@ import 'package:intl/intl.dart';
 
 class ProductsByType extends StatefulWidget {
   const ProductsByType({Key? key}) : super(key: key);
-
+  static String id = 'products_by_type';
   @override
   _ProductsByTypeState createState() => _ProductsByTypeState();
 }
@@ -186,7 +186,7 @@ class _ProductsByTypeState extends State<ProductsByType> {
                                         topRight: Radius.circular(10),
                                       ),
                                       child: Image.network(
-                                          'http://192.168.1.6:8000${productapi.products2[index].image}'),
+                                          'http://192.168.1.4:8000${productapi.products2[index].image}'),
                                     ),
                                     SizedBox(
                                       width: 110,

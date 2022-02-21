@@ -4,7 +4,7 @@ import 'package:flutter/material.dart';
 
 class LoadingScreen extends StatefulWidget {
   const LoadingScreen({Key? key}) : super(key: key);
-
+  static String id = 'loading';
   @override
   _LoadingScreenState createState() => _LoadingScreenState();
 }

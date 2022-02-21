@@ -46,7 +46,9 @@ class _SearchScreenState extends State<SearchScreen> {
                 onChanged: (value) {
                   List<Colorpro> lst = [];
                   for (var item in slideapi.lstcolor) {
-                    if (item.name.contains(search.text)) {
+                    if (item.name
+                        .toLowerCase()
+                        .contains(search.text.toLowerCase())) {
                       lst.add(item);
                     }
                   }
@@ -94,9 +96,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 print(msg);
                               }, search.text);
                             },
-                            child: const Icon(
-                              Icons.search,
-                            )),
+                            child: Image.asset('images/search.png')),
                       ),
                     ),
                     border: InputBorder.none,
@@ -105,13 +105,15 @@ class _SearchScreenState extends State<SearchScreen> {
               ),
             ),
             actions: [
-              IconButton(
-                  onPressed: () {
-                    setState(() {
-                      show = !show;
-                    });
-                  },
-                  icon: const Icon(Icons.filter_list, color: Colors.black))
+              GestureDetector(
+                onTap: () {
+                  setState(() {
+                    show = !show;
+                    print(show);
+                  });
+                },
+                child: Image.asset('images/filter.png'),
+              )
             ],
             leading: IconButton(
                 onPressed: () {
@@ -142,7 +144,7 @@ class _SearchScreenState extends State<SearchScreen> {
                           //   ],
                           // ),
                           SizedBox(
-                            height: 30,
+                            height: 60,
                             child: ListView(
                               scrollDirection: Axis.horizontal,
                               physics: const BouncingScrollPhysics(),
@@ -184,24 +186,18 @@ class _SearchScreenState extends State<SearchScreen> {
                                   child: Container(
                                     margin: const EdgeInsets.only(
                                         right: 10, left: 10),
-                                    width: 120,
-                                    height: 35,
+                                    width: 60,
+                                    height: 60,
                                     decoration: BoxDecoration(
-                                      borderRadius: BorderRadius.circular(25),
+                                      shape: BoxShape.circle,
                                       color: Colors.transparent,
                                       border: Border.all(color: Colors.black),
                                     ),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: const [
-                                        Text('Điện Thoại',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                        Icon(Icons.phone_android),
-                                      ],
+                                    child: Center(
+                                      child: Image.asset(
+                                          'images/smartphone.png',
+                                          width: 40,
+                                          height: 40),
                                     ),
                                   ),
                                 ),
@@ -240,25 +236,18 @@ class _SearchScreenState extends State<SearchScreen> {
                                     // setState(() {});
                                   },
                                   child: Container(
-                                    margin: const EdgeInsets.only(right: 10),
-                                    width: 120,
-                                    height: 35,
+                                    margin: const EdgeInsets.only(
+                                        right: 10, left: 10),
+                                    width: 60,
+                                    height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(25),
-                                        color: Colors.transparent,
-                                        border:
-                                            Border.all(color: Colors.black)),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: const [
-                                        Text('LapTop',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                        Icon(Icons.laptop_chromebook),
-                                      ],
+                                      shape: BoxShape.circle,
+                                      color: Colors.transparent,
+                                      border: Border.all(color: Colors.black),
+                                    ),
+                                    child: Center(
+                                      child: Image.asset('images/laptop.png',
+                                          width: 40, height: 40),
                                     ),
                                   ),
                                 ),
@@ -298,25 +287,18 @@ class _SearchScreenState extends State<SearchScreen> {
                                     // setState(() {});
                                   },
                                   child: Container(
-                                    margin: const EdgeInsets.only(right: 10),
-                                    width: 100,
-                                    height: 30,
+                                    margin: const EdgeInsets.only(
+                                        right: 10, left: 10),
+                                    width: 60,
+                                    height: 60,
                                     decoration: BoxDecoration(
-                                        borderRadius: BorderRadius.circular(25),
-                                        color: Colors.transparent,
-                                        border:
-                                            Border.all(color: Colors.black)),
-                                    child: Row(
-                                      mainAxisAlignment:
-                                          MainAxisAlignment.center,
-                                      children: const [
-                                        Text('Tablet',
-                                            style: TextStyle(
-                                              color: Colors.black,
-                                              fontWeight: FontWeight.bold,
-                                            )),
-                                        Icon(Icons.tablet_android),
-                                      ],
+                                      shape: BoxShape.circle,
+                                      color: Colors.transparent,
+                                      border: Border.all(color: Colors.black),
+                                    ),
+                                    child: Center(
+                                      child: Image.asset('images/tablet.png',
+                                          width: 40, height: 40),
                                     ),
                                   ),
                                 ),
@@ -373,7 +355,7 @@ class _SearchScreenState extends State<SearchScreen> {
                                 ClipRRect(
                                     // borderRadius: BorderRadius.circular(5),
                                     child: Image.network(
-                                        'http://192.168.1.6:8000${productapi.products2[index].image}')),
+                                        'http://192.168.1.4:8000${productapi.products2[index].image}')),
                                 Padding(
                                   padding: const EdgeInsets.only(
                                       top: 5.0,

@@ -11,7 +11,7 @@ import 'package:provider/provider.dart';
 
 class LoginScreen extends StatefulWidget {
   const LoginScreen({Key? key}) : super(key: key);
-
+  static String id = '/';
   @override
   _LoginScreenState createState() => _LoginScreenState();
 }
@@ -145,7 +145,9 @@ class _LoginScreenState extends State<LoginScreen> {
                             Padding(
                               padding: const EdgeInsets.only(right: 15),
                               child: TextButton(
-                                  onPressed: () {},
+                                  onPressed: () {
+                                    Navigator.pushNamed(context, 'resetpass');
+                                  },
                                   child: const Text(
                                     'Forgot password',
                                     style:

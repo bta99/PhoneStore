@@ -200,7 +200,12 @@ class _OrderCancelScreenState extends State<OrderCancelScreen> {
                                           width: 200,
                                           height: 35,
                                           child: ElevatedButton(
-                                              onPressed: () {},
+                                              onPressed: () {
+                                                Navigator.pushNamed(
+                                                    context, 'order_detail',
+                                                    arguments: orderapi
+                                                        .lstOrders[index]);
+                                              },
                                               child: const Text(
                                                   'Xem chi tiết đơn hàng')),
                                         ),
@@ -218,16 +223,45 @@ class _OrderCancelScreenState extends State<OrderCancelScreen> {
                                                               (states) => Colors
                                                                   .redAccent)),
                                               onPressed: () {
-                                                // orderapi.cancelOrder(
-                                                //     orderapi.lstOrders[index].id,
-                                                //     orderapi.lstOrders[index]
-                                                //         .accountid);
-                                                // orderapi.getOrder(
-                                                //     orderapi.lstOrders[index]
-                                                //         .accountid,
-                                                //     'chờ xử lý');
+                                                showDialog(
+                                                    barrierDismissible: false,
+                                                    context: context,
+                                                    builder: (_) {
+                                                      return AlertDialog(
+                                                        backgroundColor:
+                                                            Colors.transparent,
+                                                        elevation: 0.0,
+                                                        content: SizedBox(
+                                                          height: 50,
+                                                          width: 100,
+                                                          child: Center(
+                                                            child: Column(
+                                                              mainAxisAlignment:
+                                                                  MainAxisAlignment
+                                                                      .center,
+                                                              children: const [
+                                                                CircularProgressIndicator()
+                                                              ],
+                                                            ),
+                                                          ),
+                                                        ),
+                                                      );
+                                                    });
+
+                                                Future.delayed(
+                                                    const Duration(
+                                                        milliseconds: 1500),
+                                                    () {
+                                                  Navigator.pop(
+                                                      context, 'cancel');
+                                                });
+                                                orderapi.deleteOrder(
+                                                    orderapi
+                                                        .lstOrders[index].id,
+                                                    orderapi.lstOrders[index]
+                                                        .accountid);
                                               },
-                                              child: const Text('xoá')),
+                                              child: const Text('ẩn')),
                                         ),
                                       )
                                     ],

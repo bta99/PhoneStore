@@ -100,9 +100,9 @@ class _UploadImageState extends State<UploadImage> {
                                     ),
                                   );
                                 });
-                            await account.getInfoAcc((msg) {
-                              print(msg);
-                            }, account.info!.id);
+                            // await account.getInfoAcc((msg) {
+                            //   print(msg);
+                            // }, account.info!.id);
                             Future.delayed(const Duration(milliseconds: 1500),
                                 () {
                               Navigator.popAndPushNamed(context, 'info');

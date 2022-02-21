@@ -1,5 +1,6 @@
 import 'dart:convert';
 import 'package:ecommerce_shop/api/order/comment.dart';
+import 'package:ecommerce_shop/api/order_detail/order_detail_model.dart';
 import 'package:ecommerce_shop/api/product/color_prod.dart';
 import 'package:ecommerce_shop/api/product/product.dart';
 import 'package:ecommerce_shop/api/wishlist/wishlist.dart';
@@ -26,7 +27,7 @@ class ProductApi extends ChangeNotifier {
       Function(String) onError, int? id, String? cal) async {
     //get product detail
     List<Colorpro> products = [];
-    String endpoint = 'http://192.168.1.6:8000/api/search';
+    String endpoint = 'http://192.168.1.4:8000/api/search';
     http.Response response = await http.post(Uri.parse(endpoint),
         body: {'categoryid': id.toString(), 'cal': cal});
     if (response.statusCode == 200) {
@@ -49,7 +50,7 @@ class ProductApi extends ChangeNotifier {
   Future<void> searchProduct2(Function(String) onError, String name) async {
     //get product by product type
     List<Colorpro> products = [];
-    String endpoint = 'http://192.168.1.6:8000/api/search-name?name=$name';
+    String endpoint = 'http://192.168.1.4:8000/api/search-name?name=$name';
     http.Response response = await http.get(Uri.parse(endpoint));
     if (response.statusCode == 200) {
       try {
@@ -70,7 +71,7 @@ class ProductApi extends ChangeNotifier {
 
   // Future<void> getProduct(Function(String) onError) async {
   //   List<Colorpro> lstcolor2 = [];
-  //   String endpoint = 'http://192.168.1.6:8000/api/product';
+  //   String endpoint = 'http://192.168.1.4:8000/api/product';
   //   http.Response response = await http.get(Uri.parse(endpoint));
   //   if (response.statusCode == 200) {
   //     try {
@@ -97,7 +98,7 @@ class ProductApi extends ChangeNotifier {
     //get product like product type
     List<Colorpro> products = [];
     List<Comment> lstTmp = [];
-    String endpoint = 'http://192.168.1.6:8000/api/product2';
+    String endpoint = 'http://192.168.1.4:8000/api/product2';
     http.Response response = await http.post(Uri.parse(endpoint), body: {
       'id': id.toString(),
       'account_id': accountid.toString(),
@@ -153,7 +154,7 @@ class ProductApi extends ChangeNotifier {
   /*get product sales*/
   Future<void> getProductSales(Function(String) onError) async {
     List<Colorpro> lstprodsales = [];
-    String endpoint = 'http://192.168.1.6:8000/api/product-sales';
+    String endpoint = 'http://192.168.1.4:8000/api/product-sales';
     http.Response response = await http.get(Uri.parse(endpoint));
     if (response.statusCode == 200) {
       try {
@@ -176,7 +177,7 @@ class ProductApi extends ChangeNotifier {
   Future<Colorpro> getOneProduct(int id) async {
     //get product like product type
 
-    String endpoint = 'http://192.168.1.6:8000/api/product/get-one/$id';
+    String endpoint = 'http://192.168.1.4:8000/api/product/get-one/$id';
     http.Response response = await http.get(Uri.parse(endpoint));
     if (response.statusCode == 200) {
       try {
@@ -195,7 +196,7 @@ class ProductApi extends ChangeNotifier {
   Future<void> addComment(
       int accountid, int productid, int rating, String content) async {
     List<Comment> lsttmp = [];
-    String endpoint = 'http://192.168.1.6:8000/api/product/add-comment';
+    String endpoint = 'http://192.168.1.4:8000/api/product/add-comment';
     http.Response response = await http.post(Uri.parse(endpoint), body: {
       'account_id': accountid.toString(),
       'product_id': productid.toString(),
@@ -222,7 +223,7 @@ class ProductApi extends ChangeNotifier {
 
   Future<dynamic> addWishList(int accountid, int productid) async {
     List<WishList> tmp = [];
-    String url = "http://192.168.1.6:8000/api/product/add-wishlist";
+    String url = "http://192.168.1.4:8000/api/product/add-wishlist";
     http.Response response = await http.post(Uri.parse(url), body: {
       'account_id': accountid.toString(),
       'product_id': productid.toString(),
@@ -248,7 +249,7 @@ class ProductApi extends ChangeNotifier {
 
   Future<void> getWishList(int accountid) async {
     List<WishList> list = [];
-    String url = "http://192.168.1.6:8000/api/product/wishlist/$accountid";
+    String url = "http://192.168.1.4:8000/api/product/wishlist/$accountid";
     http.Response response = await http.get(Uri.parse(url));
     if (response.statusCode == 200) {
       try {
@@ -270,5 +271,57 @@ class ProductApi extends ChangeNotifier {
   changeSearchProduct(List<Colorpro> lst) {
     products2 = lst;
     notifyListeners();
+  }
+
+  bool tmpResult = false;
+  Future<bool> deleteWishListItem(int accountid, int productid, int cal) async {
+    List<WishList> tmpList = [];
+    String url = "http://192.168.1.4:8000/api/product/delete-wishlist";
+    http.Response response = await http.post(Uri.parse(url), body: {
+      'account_id': accountid.toString(),
+      'product_id': productid.toString(),
+      'cal': cal.toString()
+    });
+    if (response.statusCode == 200) {
+      try {
+        dynamic object = json.decode(response.body);
+        dynamic data = object['wishlist'];
+        dynamic result = object['success'];
+        data.forEach((item) {
+          tmpList.add(WishList.fromJson(item));
+        });
+        wishlist = tmpList;
+        tmpResult = result;
+        notifyListeners();
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      print('delete faild');
+    }
+    return tmpResult;
+  }
+
+  List<OrderDetail> lstOrderdetail = [];
+  Future<void> getOrderDetails(int accountid, int id) async {
+    List<OrderDetail> list = [];
+    String url = "http://192.168.1.4:8000/api/order/get-order-detail";
+    http.Response response = await http.post(Uri.parse(url),
+        body: {'account_id': accountid.toString(), 'id': id.toString()});
+    if (response.statusCode == 200) {
+      try {
+        dynamic object = json.decode(response.body);
+        dynamic data = object['lstOrderDetail'];
+        data.forEach((item) {
+          list.add(OrderDetail.fromJson(item));
+        });
+        lstOrderdetail = list;
+        notifyListeners();
+      } catch (e) {
+        print(e);
+      }
+    } else {
+      print("faild get list order details");
+    }
   }
 }

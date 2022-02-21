@@ -2,6 +2,7 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:ecommerce_shop/api/account/api_acc.dart';
 import 'package:ecommerce_shop/api/product/product_api.dart';
 import 'package:ecommerce_shop/api/slider/slider_api.dart';
+import 'package:ecommerce_shop/screens/product_all.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
@@ -9,7 +10,7 @@ import 'package:intl/intl.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({Key? key}) : super(key: key);
-
+  static String id = 'home';
   @override
   _HomeScreenState createState() => _HomeScreenState();
 }
@@ -41,7 +42,7 @@ class _HomeScreenState extends State<HomeScreen> {
             children: [
               IconButton(
                   onPressed: () {
-                    print(accountapi.info!.fullname);
+                    Navigator.pushNamed(context, 'notification');
                   },
                   icon: const Icon(Icons.notifications, color: Colors.orange)),
               const Positioned(
@@ -52,11 +53,19 @@ class _HomeScreenState extends State<HomeScreen> {
             ],
           ),
           actions: [
-            IconButton(
-                onPressed: () {
-                  Navigator.pushNamed(context, 'cart');
-                },
-                icon: const Icon(Icons.shopping_bag_sharp, color: Colors.black))
+            GestureDetector(
+              onTap: () {
+                Navigator.pushNamed(context, 'cart');
+              },
+              child: Padding(
+                padding: const EdgeInsets.only(right: 15.0),
+                child: Image.asset(
+                  'images/shopping-cart.png',
+                  width: 25,
+                  height: 25,
+                ),
+              ),
+            )
           ],
           bottom: PreferredSize(
             preferredSize: const Size.fromHeight(40),
@@ -94,10 +103,11 @@ class _HomeScreenState extends State<HomeScreen> {
                         width: 55,
                         margin:
                             const EdgeInsets.only(right: 3, top: 3, bottom: 3),
-                        child: IconButton(
-                            onPressed: () {},
-                            icon:
-                                const Icon(Icons.search, color: Colors.white)),
+                        child: Image.asset(
+                          'images/search.png',
+                          width: 15,
+                          height: 15,
+                        ),
                         decoration: BoxDecoration(
                             color: Colors.redAccent,
                             borderRadius: BorderRadius.circular(25)),
@@ -129,10 +139,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 color: Colors.transparent,
                                 // height: 200,
                                 child: Image.network(
-                                    'http://192.168.1.6:8000${slideapi.sliders[index].image}'));
+                                    'http://192.168.1.4:8000${slideapi.sliders[index].image}'));
                           }),
                           options: CarouselOptions(
-                            aspectRatio: 22 / 9,
+                            aspectRatio: 23 / 9,
                             autoPlay: true,
                             enableInfiniteScroll: true,
                             viewportFraction: 1,
@@ -154,8 +164,10 @@ class _HomeScreenState extends State<HomeScreen> {
                                 ),
                               ),
                             ),
-                            Icon(Icons.category_rounded,
-                                color: Colors.orangeAccent)
+                            Icon(
+                              Icons.list_alt,
+                              color: Colors.orangeAccent,
+                            ),
                           ],
                         ),
                         const SizedBox(height: 10),
@@ -179,6 +191,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                     children: [
                                       GestureDetector(
                                         onTap: () {
+                                          print(slideapi.categories[index].id);
                                           Navigator.pushNamed(
                                               context, 'products_by_type',
                                               arguments: slideapi
@@ -197,7 +210,7 @@ class _HomeScreenState extends State<HomeScreen> {
                                                 borderRadius:
                                                     BorderRadius.circular(10),
                                                 child: Image.network(
-                                                    'http://192.168.1.6:8000${slideapi.categories[index].image}',
+                                                    'http://192.168.1.4:8000${slideapi.categories[index].image}',
                                                     fit: BoxFit.cover))),
                                       ),
                                       const SizedBox(height: 5),
@@ -220,15 +233,23 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
-                                children: const [
-                                  Text(
+                                children: [
+                                  const Text(
                                     'Sales',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 17,
                                         color: Colors.black),
                                   ),
-                                  Icon(Icons.bolt, color: Colors.orangeAccent)
+                                  // Icon(Icons.bolt, color: Colors.orangeAccent)
+                                  const SizedBox(
+                                    width: 10,
+                                  ),
+                                  Image.asset(
+                                    'images/flash-sale.png',
+                                    width: 20,
+                                    height: 20,
+                                  ),
                                 ],
                               ),
                               Row(children: [
@@ -269,7 +290,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                       onTap: () async {
                                         await productapi.changeItem(
                                             slideapi.lstsales[index]);
-                                        // print(productapi.itemtemp.productid);
                                         Navigator.pushNamed(
                                           context,
                                           'test',
@@ -303,8 +323,20 @@ class _HomeScreenState extends State<HomeScreen> {
                                             mainAxisAlignment:
                                                 MainAxisAlignment.center,
                                             children: [
-                                              Image.network(
-                                                  'http://192.168.1.6:8000${slideapi.lstsales[index].image}'),
+                                              Stack(
+                                                children: [
+                                                  Image.network(
+                                                      'http://192.168.1.4:8000${slideapi.lstsales[index].image}'),
+                                                  Positioned(
+                                                    right: 5,
+                                                    child: Image.asset(
+                                                      'images/sale.png',
+                                                      width: 30,
+                                                      height: 30,
+                                                    ),
+                                                  )
+                                                ],
+                                              ),
                                               Padding(
                                                 padding: const EdgeInsets.only(
                                                     left: 15, right: 10),
@@ -368,21 +400,27 @@ class _HomeScreenState extends State<HomeScreen> {
                             mainAxisAlignment: MainAxisAlignment.spaceBetween,
                             children: [
                               Row(
-                                children: const [
-                                  Text(
+                                children: [
+                                  const Text(
                                     'Danh sách sản phẩm',
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         fontSize: 15,
                                         color: Colors.black),
                                   ),
-                                  Icon(Icons.phone_iphone_outlined,
-                                      color: Colors.orangeAccent)
+                                  Image.asset(
+                                    'images/smartphone.png',
+                                    width: 20,
+                                    height: 20,
+                                  ),
                                 ],
                               ),
                               Row(children: [
                                 TextButton(
-                                    onPressed: () {},
+                                    onPressed: () {
+                                      Navigator.pushNamed(
+                                          context, ProductAllScreen.id);
+                                    },
                                     child: const Text('xem thêm',
                                         style: TextStyle(color: Colors.black))),
                                 const Icon(Icons.keyboard_arrow_down_outlined)
@@ -406,7 +444,6 @@ class _HomeScreenState extends State<HomeScreen> {
                                 onTap: () async {
                                   await productapi
                                       .changeItem(slideapi.lstcolor[index]);
-                                  // print(productapi.lstcolor[index].name);
                                   Navigator.pushNamed(
                                     context,
                                     'test',
@@ -435,8 +472,23 @@ class _HomeScreenState extends State<HomeScreen> {
                                       mainAxisAlignment:
                                           MainAxisAlignment.center,
                                       children: [
-                                        Image.network(
-                                            'http://192.168.1.6:8000${slideapi.lstcolor[index].image}'),
+                                        Stack(
+                                          children: [
+                                            Image.network(
+                                                'http://192.168.1.4:8000${slideapi.lstcolor[index].image}'),
+                                            slideapi.lstcolor[index]
+                                                        .salesprice >
+                                                    0
+                                                ? Positioned(
+                                                    right: 5,
+                                                    child: Image.asset(
+                                                      'images/sale.png',
+                                                      width: 30,
+                                                      height: 30,
+                                                    ))
+                                                : Container()
+                                          ],
+                                        ),
                                         Padding(
                                           padding: const EdgeInsets.only(
                                               left: 15, right: 10),
@@ -521,11 +573,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       child: Column(children: [
                         productapi.index == 0
-                            ? const Icon(Icons.home_filled, color: Colors.red)
-                            : const Icon(Icons.home_filled),
+                            ? Image.asset('images/active_home.png')
+                            : Image.asset('images/home.png'),
                         productapi.index == 0
                             ? const Text('Trang Chủ',
-                                style: TextStyle(color: Colors.red))
+                                style: TextStyle(color: Colors.orange))
                             : const Text('Trang Chủ')
                       ]),
                     ),
@@ -536,9 +588,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       child: Column(children: [
                         productapi.index == 1
-                            ? const Icon(Icons.favorite_border_outlined,
-                                color: Colors.red)
-                            : const Icon(Icons.favorite_border_outlined),
+                            ? Image.asset('images/like.png')
+                            : Image.asset('images/love.png'),
                         productapi.index == 1
                             ? const Text('Yêu Thích',
                                 style: TextStyle(color: Colors.red))
@@ -554,9 +605,8 @@ class _HomeScreenState extends State<HomeScreen> {
                       },
                       child: Column(children: [
                         productapi.index == 2
-                            ? const Icon(Icons.manage_accounts_outlined,
-                                color: Colors.red)
-                            : const Icon(Icons.manage_accounts_outlined),
+                            ? Image.asset('images/user.png')
+                            : Image.asset('images/account.png'),
                         productapi.index == 2
                             ? const Text('Tài Khoản',
                                 style: TextStyle(color: Colors.red))

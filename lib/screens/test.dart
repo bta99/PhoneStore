@@ -13,7 +13,7 @@ import 'package:provider/provider.dart';
 
 class Test extends StatefulWidget {
   const Test({Key? key}) : super(key: key);
-
+  static String id = 'test';
   @override
   _TestState createState() => _TestState();
 }
@@ -57,7 +57,7 @@ class _TestState extends State<Test> {
                                       // width: 250,
                                       color: Colors.transparent,
                                       child: Image.network(
-                                          'http://192.168.1.6:8000${productapi.prod[index].image}'),
+                                          'http://192.168.1.4:8000${productapi.prod[index].image}'),
                                     );
                                   },
                                   options: CarouselOptions(
@@ -421,7 +421,7 @@ class _TestState extends State<Test> {
                                                 width: 1)),
                                         child: ClipRRect(
                                             child: Image.network(
-                                                'http://192.168.1.6:8000${productapi.prod[index].image}',
+                                                'http://192.168.1.4:8000${productapi.prod[index].image}',
                                                 fit: BoxFit.cover))),
                                   ),
                                   Text(
@@ -487,35 +487,34 @@ class _TestState extends State<Test> {
         child: Padding(
           padding:
               const EdgeInsets.only(bottom: 5, left: 20, right: 20, top: 5),
-          child:
-              Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-            SizedBox(
-                width: 150,
-                child: ElevatedButton(
-                    onPressed: () {
-                      print(productapi.prod);
-                    },
-                    child: const Text('Buy Now'))),
+          child: Row(mainAxisAlignment: MainAxisAlignment.center, children: [
+            // SizedBox(
+            //     width: 150,
+            //     child: ElevatedButton(
+            //         onPressed: () {
+            //           print(productapi.prod);
+            //         },
+            //         child: const Text('Buy Now'))),
             Consumer<CartApi>(
               builder: (_, cart, child) {
                 return SizedBox(
-                    width: 150,
+                    width: 300,
                     child: ElevatedButton(
                       onPressed: () async {
                         await apicart.addCart((msg) {
                           print(msg);
                         }, productapi.itemtemp.id, 1, cartapi.acctemp!.id);
-                        apicart.getCart((msg) {
-                          print(msg);
-                        }, account.info!.id);
+                        // apicart.getCart((msg) {
+                        //   print(msg);
+                        // }, account.info!.id);
                         var content =
                             SnackBar(content: Text(apicart.kq.toString()));
                         ScaffoldMessenger.of(context).showSnackBar(content);
                       },
-                      child: const Text('Add To Cart'),
+                      child: const Text('Thêm vào giỏ hàng'),
                       style: ButtonStyle(
                           backgroundColor: MaterialStateColor.resolveWith(
-                              (states) => Colors.orangeAccent)),
+                              (states) => Colors.blueAccent)),
                     ));
               },
             ),
@@ -554,11 +553,8 @@ class _TestState extends State<Test> {
                       borderRadius: BorderRadius.circular(25),
                       color: Colors.red),
                   width: 20,
-                  child: GestureDetector(
-                      child: const Icon(
-                    Icons.search,
-                    color: Colors.white,
-                  )),
+                  child:
+                      GestureDetector(child: Image.asset('images/search.png')),
                 ),
               ),
               border: InputBorder.none,
@@ -667,7 +663,7 @@ class lstComment extends StatelessWidget {
                                             borderRadius:
                                                 BorderRadius.circular(100),
                                             child: Image.network(
-                                                'http://192.168.1.6:8000/${acc.acctemp!.image}',
+                                                'http://192.168.1.4:8000/${acc.acctemp!.image}',
                                                 fit: BoxFit.fill),
                                           )),
                                     )
@@ -916,7 +912,7 @@ class lstComment extends StatelessWidget {
                                             productapi
                                                 .lstComments[index].accountid
                                         ? Image.network(
-                                            'http://192.168.1.6:8000/${productapi.lstComments[index].image}',
+                                            'http://192.168.1.4:8000/${productapi.lstComments[index].image}',
                                             width: 50,
                                             height: 50,
                                             fit: BoxFit.cover,
@@ -947,7 +943,7 @@ class lstComment extends StatelessWidget {
                                                                   .circular(
                                                                       100),
                                                           child: Image.network(
-                                                              'http://192.168.1.6:8000/${account.info!.image}',
+                                                              'http://192.168.1.4:8000/${account.info!.image}',
                                                               fit: BoxFit.fill),
                                                         )),
                                                   )

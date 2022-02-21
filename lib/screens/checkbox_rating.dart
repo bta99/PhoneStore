@@ -1,11 +1,12 @@
 import 'package:ecommerce_shop/api/order/order_api.dart';
+import 'package:ecommerce_shop/screens/wish_list_screen.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 class CheckBoxScreen extends StatefulWidget {
   const CheckBoxScreen({Key? key}) : super(key: key);
-
+  static String id = 'checkbox';
   @override
   _CheckBoxScreenState createState() => _CheckBoxScreenState();
 }
@@ -27,10 +28,15 @@ class _CheckBoxScreenState extends State<CheckBoxScreen> {
             children: List.generate(5, (index) {
               return Padding(
                 padding: const EdgeInsets.all(8.0),
-                child: Container(
-                  width: 150,
-                  height: 200,
-                  color: Colors.red,
+                child: GestureDetector(
+                  onTap: () {
+                    Navigator.pushNamed(context, CheckBoxScreen.id);
+                  },
+                  child: Container(
+                    width: 150,
+                    height: 200,
+                    color: Colors.red,
+                  ),
                 ),
               );
             }),

@@ -20,7 +20,8 @@ class CartApi extends ChangeNotifier {
 
   Future<dynamic> addCart(
       Function(String) onError, int id, int quantity, int accountid) async {
-    String endpoint = 'http://192.168.1.6:8000/api/cart/add-cart';
+    List<Cartitem> carts = [];
+    String endpoint = 'http://192.168.1.4:8000/api/cart/add-cart';
     http.Response response = await http.post(Uri.parse(endpoint),
         body: ({
           'quantity': quantity.toString(),
@@ -34,8 +35,13 @@ class CartApi extends ChangeNotifier {
         dynamic JsonRaw = json.decode(response.body);
         dynamic result = JsonRaw['results'];
         dynamic result2 = JsonRaw['count'];
+        dynamic result3 = JsonRaw['lstcart'];
         kq = result;
         countCart = result2;
+        result3.forEach((c) {
+          carts.add(Cartitem.fromJson(c));
+        });
+        lstcart = carts;
         notifyListeners();
       } catch (e) {
         print('status {$e}');
@@ -48,7 +54,7 @@ class CartApi extends ChangeNotifier {
 
   Future<void> getCart(Function(String) onError, int accid) async {
     List<Cartitem> carts = [];
-    String endpoint = 'http://192.168.1.6:8000/api/cart/$accid';
+    String endpoint = 'http://192.168.1.4:8000/api/cart/$accid';
     http.Response response = await http.get(Uri.parse(endpoint));
     if (response.statusCode == 200) {
       try {
@@ -79,7 +85,7 @@ class CartApi extends ChangeNotifier {
   Future<void> updateStatusCart(
       Function(String) onError, int accountid, int productid) async {
     List<Cartitem> cartTmp = [];
-    String endpoint = 'http://192.168.1.6:8000/api/cart/update-status-cart';
+    String endpoint = 'http://192.168.1.4:8000/api/cart/update-status-cart';
     http.Response response = await http.post(Uri.parse(endpoint),
         body: ({
           'account_id': accountid.toString(),
@@ -142,13 +148,14 @@ class CartApi extends ChangeNotifier {
   }
 
   Future<void> deleteCart(
-      Function(String) onError, int accountid, int productid) async {
+      Function(String) onError, int accountid, int productid, int cal) async {
     List<Cartitem> cartTmp = [];
-    String endpoint = 'http://192.168.1.6:8000/api/cart/delete-cart';
+    String endpoint = 'http://192.168.1.4:8000/api/cart/delete-cart';
     http.Response response = await http.post(Uri.parse(endpoint),
         body: ({
           'account_id': accountid.toString(),
-          'product_id': productid.toString()
+          'product_id': productid.toString(),
+          'cal': cal.toString()
         }));
     if (response.statusCode == 200) {
       try {
@@ -175,7 +182,7 @@ class CartApi extends ChangeNotifier {
 
   Future<void> resetAllStatusCart(
       Function(String) onError, int accountid) async {
-    String endpoint = 'http://192.168.1.6:8000/api/cart/reset-all-status-cart';
+    String endpoint = 'http://192.168.1.4:8000/api/cart/reset-all-status-cart';
     http.Response response = await http.post(Uri.parse(endpoint),
         body: ({'account_id': accountid.toString()}));
     if (response.statusCode == 200) {
@@ -195,7 +202,7 @@ class CartApi extends ChangeNotifier {
   bool? check;
   Future<bool?> updateQuantity(int accountid, int productid, int cal) async {
     List<Cartitem> cartTmp = [];
-    String endpoint = 'http://192.168.1.6:8000/api/cart/up-quantity';
+    String endpoint = 'http://192.168.1.4:8000/api/cart/up-quantity';
     http.Response response = await http.post(Uri.parse(endpoint),
         body: ({
           'account_id': accountid.toString(),
@@ -254,7 +261,7 @@ class CartApi extends ChangeNotifier {
 
   Future<void> selectAll(Function(String) onError, int accountid) async {
     List<Cartitem> cartTmp = [];
-    String endpoint = 'http://192.168.1.6:8000/api/cart/select-allcart';
+    String endpoint = 'http://192.168.1.4:8000/api/cart/select-allcart';
     http.Response response = await http.post(Uri.parse(endpoint),
         body: ({
           'account_id': accountid.toString(),
@@ -315,7 +322,7 @@ class CartApi extends ChangeNotifier {
       Function(String) onError, int accountid) async {
     List<Cartitem> lstItem = [];
     String endpoint =
-        'http://192.168.1.6:8000/api/cart/cart-checkout/$accountid';
+        'http://192.168.1.4:8000/api/cart/cart-checkout/$accountid';
     http.Response response = await http.get(
       Uri.parse(endpoint),
     );

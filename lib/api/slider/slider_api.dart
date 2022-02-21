@@ -11,6 +11,7 @@ class SliderApi extends ChangeNotifier {
   List<Category> categories = [];
   List<Colorpro> lstcolor = [];
   List<Colorpro> lstsales = [];
+  List<Colorpro> lstforsearch = [];
   Future<void> getSlider(Function(String) onError) async {
     // List<Product> products = [];
     if (sliders.isEmpty) {
@@ -18,7 +19,7 @@ class SliderApi extends ChangeNotifier {
       List<Category> cate = [];
       List<Colorpro> lstprodsales = [];
       List<Colorpro> lstproduct = [];
-      String endpoint = 'http://192.168.1.6:8000/api/slider';
+      String endpoint = 'http://192.168.1.4:8000/api/slider';
       http.Response response = await http.get(Uri.parse(endpoint));
       if (response.statusCode == 200) {
         try {
@@ -43,6 +44,7 @@ class SliderApi extends ChangeNotifier {
           categories = cate;
           lstcolor = lstproduct;
           lstsales = lstprodsales;
+          lstforsearch = lstcolor;
           notifyListeners();
         } catch (e) {
           print('get sliders faild');
@@ -53,5 +55,27 @@ class SliderApi extends ChangeNotifier {
       // lstproduct = products;
       // print(lstcolor.length);
     }
+  }
+
+  search(String key) {
+    List<Colorpro> lst = [];
+    for (var item in lstcolor) {
+      if (item.name.toLowerCase().contains(key.toLowerCase())) {
+        lst.add(item);
+      }
+    }
+    if (lst.isEmpty) {
+      lstforsearch = lstcolor;
+      notifyListeners();
+    } else {
+      lstforsearch = lst;
+      notifyListeners();
+    }
+    print(key);
+  }
+
+  resetLstsearch() {
+    lstforsearch = lstcolor;
+    notifyListeners();
   }
 }

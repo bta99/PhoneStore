@@ -38,10 +38,37 @@ class _OrderManagementScreenState extends State<OrderManagementScreen> {
                   size: 16,
                   color: Colors.black,
                 )),
-            bottom: const TabBar(
+            bottom: TabBar(
+                onTap: (index) {
+                  showDialog(
+                      barrierDismissible: false,
+                      context: context,
+                      builder: (_) {
+                        return AlertDialog(
+                          backgroundColor: Colors.transparent,
+                          elevation: 0.0,
+                          content: SizedBox(
+                            height: 50,
+                            width: 100,
+                            child: Center(
+                              child: Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                children: const [CircularProgressIndicator()],
+                              ),
+                            ),
+                          ),
+                        );
+                      });
+
+                  Future.delayed(const Duration(milliseconds: 1500), () {
+                    Navigator.pop(context, 'cancel');
+                  });
+                },
                 indicatorColor: Colors.red,
                 indicatorSize: TabBarIndicatorSize.label,
-                tabs: [
+                isScrollable: true,
+                physics: BouncingScrollPhysics(),
+                tabs: const [
                   Tab(
                       child: Text(
                     'Chờ xử lí',

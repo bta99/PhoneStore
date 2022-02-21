@@ -3,6 +3,7 @@ import 'package:ecommerce_shop/api/account/api_acc.dart';
 import 'package:ecommerce_shop/api/cart/cart_api.dart';
 import 'package:ecommerce_shop/api/product/color_prod.dart';
 import 'package:ecommerce_shop/api/product/product_api.dart';
+import 'package:ecommerce_shop/api/slider/slider_api.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
@@ -10,7 +11,7 @@ import 'package:provider/provider.dart';
 
 class CartScreen extends StatefulWidget {
   const CartScreen({Key? key}) : super(key: key);
-
+  static String id = 'cart';
   @override
   _CartScreenState createState() => _CartScreenState();
 }
@@ -21,6 +22,7 @@ class _CartScreenState extends State<CartScreen> {
     var cartapi = Provider.of<CartApi>(context, listen: false);
     var accountapi = Provider.of<ApiAcc>(context, listen: false);
     var pro = Provider.of<ProductApi>(context, listen: false);
+    var slideapi = Provider.of<SliderApi>(context, listen: false);
     // var arg = ModalRoute.of(context)!.settings.arguments as Account;
 
     cartapi.getCart((msg) {
@@ -39,10 +41,39 @@ class _CartScreenState extends State<CartScreen> {
           },
         ),
         actions: [
-          IconButton(
-              onPressed: () {},
-              icon:
-                  const Icon(Icons.delete_sharp, color: Colors.black, size: 18))
+          GestureDetector(
+            onTap: () {
+              showDialog(
+                  barrierDismissible: false,
+                  context: context,
+                  builder: (_) {
+                    return AlertDialog(
+                      backgroundColor: Colors.transparent,
+                      elevation: 0.0,
+                      content: SizedBox(
+                        height: 50,
+                        width: 100,
+                        child: Center(
+                          child: Column(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: const [CircularProgressIndicator()],
+                          ),
+                        ),
+                      ),
+                    );
+                  });
+
+              Future.delayed(const Duration(milliseconds: 1500), () {
+                Navigator.pop(context, 'cancel');
+              });
+              cartapi.deleteCart((msg) {
+                print(msg);
+              }, accountapi.info!.id, 0, 2);
+              cartapi.resetTotal();
+              cartapi.resetbtnAll();
+            },
+            child: Image.asset('images/remove.png'),
+          ),
         ],
         leading: IconButton(
             onPressed: () {
@@ -52,7 +83,7 @@ class _CartScreenState extends State<CartScreen> {
               pro.changeIndex(0);
               cartapi.resetTotal();
               cartapi.resetbtnAll();
-              Navigator.popAndPushNamed(context, 'home');
+              Navigator.pushNamed(context, 'home');
             },
             icon: const Icon(Icons.arrow_back_ios, color: Colors.black)),
       ),
@@ -115,9 +146,15 @@ class _CartScreenState extends State<CartScreen> {
                                   }),
                               GestureDetector(
                                 onTap: () async {
-                                  Colorpro item = await pro.getOneProduct(
-                                      cartapi.lstcart[index].productid);
-                                  pro.changeItem(item);
+                                  var itemPro;
+                                  for (var item in slideapi.lstcolor) {
+                                    if (item.id ==
+                                        cartapi.lstcart[index].productid) {
+                                      itemPro = item;
+                                      print(item.name);
+                                    }
+                                  }
+                                  await pro.changeItem(itemPro);
                                   Navigator.pushNamed(
                                     context,
                                     'test',
@@ -126,7 +163,7 @@ class _CartScreenState extends State<CartScreen> {
                                 child: ClipRRect(
                                   borderRadius: BorderRadius.circular(15),
                                   child: Image.network(
-                                    'http://192.168.1.6:8000${cartapi.lstcart[index].image}',
+                                    'http://192.168.1.4:8000${cartapi.lstcart[index].image}',
                                     width: 120,
                                   ),
                                 ),
@@ -149,46 +186,46 @@ class _CartScreenState extends State<CartScreen> {
                                   )
                                 ],
                               ),
-                              IconButton(
-                                  onPressed: () {
-                                    showDialog(
-                                        barrierDismissible: false,
-                                        context: context,
-                                        builder: (_) {
-                                          return AlertDialog(
-                                            backgroundColor: Colors.transparent,
-                                            elevation: 0.0,
-                                            content: SizedBox(
-                                              height: 50,
-                                              width: 100,
-                                              child: Center(
-                                                child: Column(
-                                                  mainAxisAlignment:
-                                                      MainAxisAlignment.center,
-                                                  children: const [
-                                                    CircularProgressIndicator()
-                                                  ],
-                                                ),
+                              GestureDetector(
+                                onTap: () {
+                                  showDialog(
+                                      barrierDismissible: false,
+                                      context: context,
+                                      builder: (_) {
+                                        return AlertDialog(
+                                          backgroundColor: Colors.transparent,
+                                          elevation: 0.0,
+                                          content: SizedBox(
+                                            height: 50,
+                                            width: 100,
+                                            child: Center(
+                                              child: Column(
+                                                mainAxisAlignment:
+                                                    MainAxisAlignment.center,
+                                                children: const [
+                                                  CircularProgressIndicator()
+                                                ],
                                               ),
                                             ),
-                                          );
-                                        });
+                                          ),
+                                        );
+                                      });
 
-                                    Future.delayed(
-                                        const Duration(milliseconds: 1500), () {
-                                      Navigator.pop(context, 'cancel');
-                                    });
-                                    cartapi.removeTotalItem(
-                                        cartapi.lstcart[index]);
-                                    cartapi.deleteCart((msg) {
-                                      print(msg);
-                                    }, cartapi.lstcart[index].accountid,
-                                        cartapi.lstcart[index].productid);
+                                  Future.delayed(
+                                      const Duration(milliseconds: 1500), () {
+                                    Navigator.pop(context, 'cancel');
+                                  });
+                                  cartapi
+                                      .removeTotalItem(cartapi.lstcart[index]);
+                                  cartapi.deleteCart((msg) {
+                                    print(msg);
+                                  }, cartapi.lstcart[index].accountid,
+                                      cartapi.lstcart[index].productid, 1);
 
-                                    cartapi.resetbtnAll();
-                                  },
-                                  icon: const Icon(Icons.remove_shopping_cart,
-                                      color: Colors.red)),
+                                  cartapi.resetbtnAll();
+                                },
+                                child: Image.asset('images/delete.png'),
+                              )
                             ],
                           ),
                           Padding(

@@ -9,7 +9,7 @@ class CategoryApi extends ChangeNotifier {
   Future<void> getCategory(Function(String) onError) async {
     // List<Product> products = [];
     List<Category> cate = [];
-    String endpoint = 'http://192.168.1.6:8000/api/category';
+    String endpoint = 'http://192.168.1.4:8000/api/category';
     http.Response response = await http.get(Uri.parse(endpoint));
     if (response.statusCode == 200) {
       try {

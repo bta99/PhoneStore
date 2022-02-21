@@ -9,7 +9,7 @@ import 'package:provider/provider.dart';
 
 class AccountScreen extends StatefulWidget {
   const AccountScreen({Key? key}) : super(key: key);
-
+  static String id = 'info';
   @override
   _AccountScreenState createState() => _AccountScreenState();
 }
@@ -26,7 +26,7 @@ class _AccountScreenState extends State<AccountScreen> {
     var productapi = Provider.of<ProductApi>(context, listen: false);
     var accountapi = Provider.of<ApiAcc>(context, listen: false);
     var cartapi = Provider.of<CartApi>(context, listen: false);
-    if (accountapi.info!.fullname == "") {
+    if (accountapi.info == null) {
       accountapi.getInfoAcc((msg) {
         print(msg);
       }, cartapi.acctemp!.id);
@@ -75,7 +75,7 @@ class _AccountScreenState extends State<AccountScreen> {
                                               borderRadius:
                                                   BorderRadius.circular(100),
                                               child: Image.network(
-                                                  'http://192.168.1.6:8000/${acc.info!.image}',
+                                                  'http://192.168.1.4:8000/${acc.info!.image}',
                                                   fit: BoxFit.fill),
                                             )),
                                       )
@@ -192,10 +192,10 @@ class _AccountScreenState extends State<AccountScreen> {
                                                               nameCTL.text,
                                                               phoneCTL.text,
                                                               addressCTL.text);
-                                                      accountapi.getInfoAcc(
-                                                          (msg) {
-                                                        print(msg);
-                                                      }, accountapi.info!.id);
+                                                      // accountapi.getInfoAcc(
+                                                      //     (msg) {
+                                                      //   print(msg);
+                                                      // }, accountapi.info!.id);
                                                       Navigator.pop(
                                                           context, 'cancel');
                                                     },
@@ -408,7 +408,7 @@ class _AccountScreenState extends State<AccountScreen> {
                     child: Column(children: [
                       productapi.index == 0
                           ? const Icon(Icons.home_filled, color: Colors.red)
-                          : const Icon(Icons.home_filled),
+                          : Image.asset('images/home.png'),
                       productapi.index == 0
                           ? const Text('Trang Chủ',
                               style: TextStyle(color: Colors.red))
@@ -422,9 +422,8 @@ class _AccountScreenState extends State<AccountScreen> {
                     },
                     child: Column(children: [
                       productapi.index == 1
-                          ? const Icon(Icons.favorite_border_outlined,
-                              color: Colors.red)
-                          : const Icon(Icons.favorite_border_outlined),
+                          ? Image.asset('images/like.png')
+                          : Image.asset('images/love.png'),
                       productapi.index == 1
                           ? const Text('Yêu Thích',
                               style: TextStyle(color: Colors.red))
@@ -439,12 +438,11 @@ class _AccountScreenState extends State<AccountScreen> {
                     },
                     child: Column(children: [
                       productapi.index == 2
-                          ? const Icon(Icons.manage_accounts_outlined,
-                              color: Colors.red)
-                          : const Icon(Icons.manage_accounts_outlined),
+                          ? Image.asset('images/user.png')
+                          : Image.asset('images/account.png'),
                       productapi.index == 2
                           ? const Text('Tài Khoản',
-                              style: TextStyle(color: Colors.red))
+                              style: TextStyle(color: Colors.orange))
                           : const Text(
                               'Tài Khoản',
                             )
